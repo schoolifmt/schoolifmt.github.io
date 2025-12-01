@@ -167,20 +167,19 @@
       display: flex;
       gap: 15px;
       padding: 15px 20px;
-      background: rgba(30, 30, 30, 0.7);
+      background: rgba(30, 30, 30, 0.8);
       border-radius: 20px;
-      backdrop-filter: blur(20px);
+      backdrop-filter: blur(15px);
       border: 1px solid rgba(128, 0, 128, 0.3);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       z-index: 1000;
-      transition: all 0.3s ease;
     }
 
     .dock-item {
       width: 60px;
       height: 60px;
       background: rgba(60, 60, 60, 0.9);
-      border-radius: 18px;
+      border-radius: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -228,7 +227,6 @@
       opacity: 0;
       transition: all 0.3s ease;
       pointer-events: none;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
 
     .dock-item:hover .dock-label {
@@ -303,24 +301,24 @@
     <main>
       <section class="cards-grid">
         <div class="card">
-          <div class="card-image">📢</div>
+          <div class="card-image">🚨</div>
           <h2 class="card-title">紧急通知</h2>
-          <p class="card-content">关于本周五全校停课进行安全演练的通知，所有师生需配合参与。</p>
+          <p class="card-content">关于本周五全校停电检修的通知，请各部门提前做好准备，关闭重要设备。</p>
         </div>
         <div class="card">
           <div class="card-image">📅</div>
           <h2 class="card-title">活动安排</h2>
-          <p class="card-content">春季运动会报名开始，各班级需在下周三前提交参赛名单。</p>
+          <p class="card-content">春季运动会将于下月举行，各班级需在本周五前提交参赛名单。</p>
         </div>
         <div class="card">
-          <div class="card-image">🎓</div>
+          <div class="card-image">📝</div>
           <h2 class="card-title">考试信息</h2>
-          <p class="card-content">期中考试时间安排已发布，请同学们合理安排复习计划。</p>
+          <p class="card-content">期末考试时间表已发布，请同学们及时查看个人考试安排，做好复习准备。</p>
         </div>
         <div class="card">
-          <div class="card-image">🏫</div>
+          <div class="card-image">📰</div>
           <h2 class="card-title">校园新闻</h2>
-          <p class="card-content">我校荣获市级优秀学校称号，感谢全体师生的共同努力。</p>
+          <p class="card-content">我校获得市级教育创新奖，感谢全体师生的共同努力与支持。</p>
         </div>
       </section>
     </main>
@@ -340,8 +338,8 @@
       <div class="dock-label">日历</div>
     </div>
     <div class="dock-item">
-      <span>📞</span>
-      <div class="dock-label">联系</div>
+      <span>⚙️</span>
+      <div class="dock-label">设置</div>
     </div>
   </nav>
 </body>

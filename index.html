@@ -11,7 +11,7 @@
     }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      font-family: 'Arial', sans-serif;
       background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
       color: #fff;
       min-height: 100vh;
@@ -58,13 +58,12 @@
 
     .title {
       font-size: 4rem;
-      font-weight: 700;
+      font-weight: bold;
       margin-bottom: 20px;
       position: relative;
       color: #fff;
       text-shadow: 0 0 20px rgba(128, 0, 128, 0.7);
       animation: pulse 2s infinite alternate;
-      letter-spacing: -0.02em;
     }
 
     .title::after {
@@ -90,14 +89,14 @@
 
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 30px;
       margin-bottom: 60px;
     }
 
     .card {
       background: rgba(40, 40, 40, 0.8);
-      border-radius: 20px;
+      border-radius: 15px;
       padding: 30px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -106,80 +105,58 @@
       animation: fadeInUp 0.8s ease-out forwards;
       opacity: 0;
       transform: translateY(30px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .card::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, #800080, #a040a0, #800080);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.5s ease;
-    }
-
-    .card:hover::before {
-      transform: scaleX(1);
     }
 
     .card:nth-child(1) { animation-delay: 0.2s; }
     .card:nth-child(2) { animation-delay: 0.4s; }
     .card:nth-child(3) { animation-delay: 0.6s; }
     .card:nth-child(4) { animation-delay: 0.8s; }
-    .card:nth-child(5) { animation-delay: 1.0s; }
-    .card:nth-child(6) { animation-delay: 1.2s; }
 
     .card:hover {
-      transform: translateY(-10px) scale(1.02);
+      transform: translateY(-10px) scale(1.03);
       box-shadow: 0 15px 40px rgba(128, 0, 128, 0.4);
       border-color: rgba(128, 0, 128, 0.5);
     }
 
-    .card-header {
-      display: flex;
-      align-items: center;
+    .card-image {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(45deg, #2a2a2a, #3a3a3a);
+      border-radius: 10px;
       margin-bottom: 20px;
-    }
-
-    .card-icon {
-      width: 50px;
-      height: 50px;
-      background: rgba(128, 0, 128, 0.2);
-      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
-      margin-right: 15px;
-      transition: all 0.3s ease;
+      font-size: 3rem;
     }
 
-    .card:hover .card-icon {
-      background: rgba(128, 0, 128, 0.4);
-      transform: scale(1.1);
+    .card-image::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(128, 0, 128, 0.2), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+    }
+
+    .card:hover .card-image::before {
+      transform: rotate(45deg) translate(50%, 50%);
     }
 
     .card-title {
-      font-size: 1.5rem;
-      font-weight: 600;
+      font-size: 1.8rem;
+      margin-bottom: 15px;
       color: #fff;
-    }
-
-    .card-date {
-      font-size: 0.9rem;
-      color: #b0b0b0;
-      margin-top: 5px;
     }
 
     .card-content {
       color: #ccc;
       line-height: 1.6;
-      font-size: 1rem;
     }
 
     .dock {
@@ -189,21 +166,21 @@
       transform: translateX(-50%);
       display: flex;
       gap: 15px;
-      padding: 15px 25px;
-      background: rgba(30, 30, 30, 0.8);
+      padding: 15px 20px;
+      background: rgba(30, 30, 30, 0.7);
       border-radius: 20px;
-      backdrop-filter: blur(15px);
+      backdrop-filter: blur(20px);
       border: 1px solid rgba(128, 0, 128, 0.3);
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       z-index: 1000;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transition: all 0.3s ease;
     }
 
     .dock-item {
       width: 60px;
       height: 60px;
       background: rgba(60, 60, 60, 0.9);
-      border-radius: 16px;
+      border-radius: 18px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -245,13 +222,13 @@
       background: rgba(128, 0, 128, 0.9);
       color: white;
       padding: 5px 10px;
-      border-radius: 8px;
+      border-radius: 5px;
       font-size: 0.8rem;
       white-space: nowrap;
       opacity: 0;
       transition: all 0.3s ease;
       pointer-events: none;
-      transform-origin: bottom center;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
     }
 
     .dock-item:hover .dock-label {
@@ -296,44 +273,6 @@
       }
     }
 
-    .floating-element {
-      position: absolute;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(128, 0, 128, 0.15) 0%, transparent 70%);
-      z-index: -1;
-    }
-
-    .floating-1 {
-      width: 200px;
-      height: 200px;
-      top: 10%;
-      left: 5%;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    .floating-2 {
-      width: 150px;
-      height: 150px;
-      bottom: 15%;
-      right: 10%;
-      animation: float 10s ease-in-out infinite 1s;
-    }
-
-    @keyframes float {
-      0%, 100% {
-        transform: translate(0, 0);
-      }
-      25% {
-        transform: translate(20px, 20px);
-      }
-      50% {
-        transform: translate(0, 30px);
-      }
-      75% {
-        transform: translate(-20px, 20px);
-      }
-    }
-
     @media (max-width: 768px) {
       .title {
         font-size: 2.5rem;
@@ -355,76 +294,33 @@
   </style>
 </head>
 <body>
-  <div class="floating-element floating-1"></div>
-  <div class="floating-element floating-2"></div>
-
   <div class="container">
     <header class="header">
       <h1 class="title">学校公告系统</h1>
-      <p class="subtitle">最新通知，重要信息，校园动态</p>
+      <p class="subtitle">最新通知与重要信息</p>
     </header>
 
     <main>
       <section class="cards-grid">
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon">📢</div>
-            <div>
-              <h2 class="card-title">期末考试安排</h2>
-              <div class="card-date">2023-12-15</div>
-            </div>
-          </div>
-          <p class="card-content">期末考试时间安排已发布，请同学们查看个人考试时间表，按时参加考试。注意携带学生证和考试用品。</p>
+          <div class="card-image">📢</div>
+          <h2 class="card-title">紧急通知</h2>
+          <p class="card-content">关于本周五全校停课进行安全演练的通知，所有师生需配合参与。</p>
         </div>
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon">🎓</div>
-            <div>
-              <h2 class="card-title">毕业典礼通知</h2>
-              <div class="card-date">2023-12-10</div>
-            </div>
-          </div>
-          <p class="card-content">2024届毕业典礼定于6月15日上午9点在体育馆举行，请毕业生准时参加，着装要求为正装。</p>
+          <div class="card-image">📅</div>
+          <h2 class="card-title">活动安排</h2>
+          <p class="card-content">春季运动会报名开始，各班级需在下周三前提交参赛名单。</p>
         </div>
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon">📚</div>
-            <div>
-              <h2 class="card-title">图书馆闭馆通知</h2>
-              <div class="card-date">2023-12-08</div>
-            </div>
-          </div>
-          <p class="card-content">因系统升级，图书馆将于12月20日至22日闭馆三天，请同学们提前安排好学习计划，合理利用时间。</p>
+          <div class="card-image">🎓</div>
+          <h2 class="card-title">考试信息</h2>
+          <p class="card-content">期中考试时间安排已发布，请同学们合理安排复习计划。</p>
         </div>
         <div class="card">
-          <div class="card-header">
-            <div class="card-icon">🏫</div>
-            <div>
-              <h2 class="card-title">校园安全提醒</h2>
-              <div class="card-date">2023-12-05</div>
-            </div>
-          </div>
-          <p class="card-content">近期校园周边治安复杂，请同学们注意人身安全，夜间尽量结伴出行，遇到可疑情况及时联系保卫处。</p>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">🚌</div>
-            <div>
-              <h2 class="card-title">校车时间调整</h2>
-              <div class="card-date">2023-12-01</div>
-            </div>
-          </div>
-          <p class="card-content">冬季来临，校车运营时间将根据日落时间进行调整，具体时间表请查看后勤服务中心公告。</p>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-icon">🥗</div>
-            <div>
-              <h2 class="card-title">食堂新菜品</h2>
-              <div class="card-date">2023-11-28</div>
-            </div>
-          </div>
-          <p class="card-content">食堂新增多款健康菜品，包括低脂餐、素食套餐等，欢迎师生品尝。营养搭配更加合理，助力健康生活。</p>
+          <div class="card-image">🏫</div>
+          <h2 class="card-title">校园新闻</h2>
+          <p class="card-content">我校荣获市级优秀学校称号，感谢全体师生的共同努力。</p>
         </div>
       </section>
     </main>

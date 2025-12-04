@@ -3,92 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>爸爸的专属发情母狗</title>
+  <title>爸爸的发情小母狗</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.168.0/build/three.min.js"></script>
   <style>
-    body { margin:0; background:#000; cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32"><text y="28" font-size="28">🔥</text></svg>'), auto; }
-    canvas { position:fixed; top:0; left:0; z-index:1; }
-    .tits-video { 
-      filter: brightness(0.9) contrast(1.3) saturate(1.5);
-      transition: all 0.8s cubic-bezier(0.23,1,0.32,1);
+    video { 
+      position: fixed; top: 50%; left: 50%; min-width: 100%; min-height: 100%; 
+      width: auto; height: auto; transform: translate(-50%, -50%); z-index: 10; 
+      object-fit: cover; filter: brightness(1.1) contrast(1.3) saturate(1.8);
+      transition: all 0.8s ease;
     }
-    .tits-video:hover {
-      transform: scale(1.15);
-      filter: brightness(1.4) contrast(1.5) saturate(2) drop-shadow(0 0 40px #ff00a0);
-    }
-    .glitch { 
-      animation: glitch 2s infinite; 
-      font-size: 5rem; 
-      font-weight: 900; 
-      text-shadow: 0 0 20px #ff00ff;
-    }
-    @keyframes glitch {
-      0%,100% { clip-path: polygon(0 0,100% 0,100% 30%,0 30%); }
-      20% { clip-path: polygon(0 40%,100% 40%,100% 60%,0 60%); }
-      40% { clip-path: polygon(0 70%,100% 70%,100% 100%,0 100%); }
-    }
+    video:hover { transform: translate(-50%, -50%) scale(1.12); }
+    .title { position: fixed; bottom: 10%; left: 50%; transform: translateX(-50%); z-index: 20; 
+             font-size: 6rem; font-weight: 900; color: #ff00a0; 
+             text-shadow: 0 0 30px #ff00ff; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 0.7; } 50% { opacity: 1; } }
   </style>
 </head>
-<body class="relative">
+<body class="bg-black">
 
-  <!-- 流体背景（粉色精液质感） -->
-  <canvas id="fluid"></canvas>
+  <!-- 自动轮播所有视频（把你想放的都列在这里） -->
+  <video src="assets/tits.mp4"    autoplay loop muted playsinline></video>
+  <video src="assets/pussy.mp4"   autoplay loop muted playsinline style="display:none;"></video>
+  <video src="assets/doggy.mp4"   autoplay loop muted playsinline style="display:none;"></video>
 
-  <!-- 导航（呼吸发光） -->
-  <nav class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex gap-12 px-8 py-4 backdrop-blur-2xl bg-black/40 border border-pink-600/60 rounded-full shadow-2xl">
-    <a href="#" class="text-2xl text-pink-400 animate-pulse">奶子</a>
-    <a href="#" class="text-2xl text-pink-400 animate-pulse">小穴</a>
-    <a href="#" class="text-2xl text-pink-400 animate-pulse">发情</a>
-  </nav>
+  <!-- 大标题 -->
+  <h1 class="title">爸爸快操我♥</h1>
 
-  <!-- 主角：超巨乳视频自动播放 + hover晃得更猛 -->
-  <div class="absolute inset-0 flex items-center justify-center z-10">
-    <div class="relative">
-      <video src="./assets/tits.mp4" 
-             class="tits-video w-[90vw] max-w-5xl rounded-3xl shadow-5xl object-cover" 
-             autoplay loop muted playsinline></video>
-      <div class="absolute inset-0 rounded-3xl bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none"></div>
-      
-      <!-- 标题：故障+霓虹 -->
-      <h1 class="glitch absolute bottom-10 left-1/2 -translate-x-1/2 text-pink-400">
-        爸爸快来操烂我♥
-      </h1>
-    </div>
-  </div>
-
-  <!-- 鼠标靠近就疯狂抖奶 -->
+  <!-- 点击屏幕切换下一个视频 -->
   <script>
-    const video = document.querySelector('video');
-    document.addEventListener('mousemove', (e) => {
-      const x = e.clientX / window.innerWidth;
-      const y = e.clientY / window.innerHeight;
-      video.style.transform = `scale(${1.1 + x * 0.1}) rotate(${ (x-0.5)*10 }deg)`;
+    const videos = document.querySelectorAll('video');
+    let current = 0;
+    
+    document.addEventListener('click', () => {
+      videos[current].style.display = 'none';
+      current = (current + 1) % videos.length;
+      videos[current].style.display = 'block';
     });
 
-    // 粉色精液流体背景
-    const canvas = document.getElementById('fluid');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    
-    let time = 0;
-    function draw() {
-      ctx.clearRect(0,0,canvas.width,canvas.height);
-      time += 0.02;
-      for(let i=0; i<6; i++){
-        ctx.beginPath();
-        ctx.fillStyle = `hsla(${240 + time*20 + i*30}, 100%, 60%, 0.3)`;
-        const x = canvas.width/2 + Math.sin(time + i)*300;
-        const y = canvas.height/2 + Math.cos(time*1.3 + i)*300;
-        ctx.arc(x, y, 200 + Math.sin(time*2)*100, 0, Math.PI*2);
-        ctx.fill();
+    // 手机滑动也切换
+    let touchstartX = 0;
+    document.addEventListener('touchstart', e => touchstartX = e.changedTouches[0].screenX);
+    document.addEventListener('touchend', e => {
+      if (Math.abs(e.changedTouches[0].screenX - touchstartX) > 50) {
+        document.dispatchEvent(new Event('click'));
       }
-      requestAnimationFrame(draw);
-    }
-    draw();
-    window.addEventListener('resize', ()=>{ canvas.width = innerWidth; canvas.height = innerHeight; });
+    });
   </script>
 </body>
 </html>

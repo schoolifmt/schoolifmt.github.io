@@ -1,0 +1,14 @@
+<script>
+document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+  cb.addEventListener('change', function() {
+    for(let i = 0; i < 15; i++) {
+      let h = document.createElement("i");
+      h.classList.add("fas", "fa-heart", "heart");
+      h.style.left = (this.getBoundingClientRect().left + 20) + "px";
+      h.style.top = (this.getBoundingClientRect().top) + "px";
+      document.body.appendChild(h);
+      setTimeout(() => h.remove(), 4000);
+    }
+  });
+});
+</script>

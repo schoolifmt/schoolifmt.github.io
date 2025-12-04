@@ -1,346 +1,200 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>学校公告系统</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOUNCY</title>
   <style>
-    * {
+    :root {
+      --bounciness: 15;
+    }
+
+    html,
+    body {
+      height: 100%;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
 
     body {
-      font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      font-family: monospace, system-ui;
+      background: #000;
       color: #fff;
-      min-height: 100vh;
-      overflow-x: hidden;
       position: relative;
+      padding-top: 4rem; /* 为导航栏留出空间 */
     }
 
-    body::before {
-      content: '';
+    /* —————— 新增导航栏样式 —————— */
+    .navbar {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
-      height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(128, 0, 128, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 80% 20%, rgba(128, 0, 128, 0.1) 0%, transparent 50%),
-                  radial-gradient(circle at 40% 80%, rgba(128, 0, 128, 0.1) 0%, transparent 50%);
-      animation: bgMove 20s ease-in-out infinite alternate;
-      z-index: -2;
-    }
-
-    @keyframes bgMove {
-      0% {
-        transform: translate(0, 0);
-      }
-      100% {
-        transform: translate(20px, 20px);
-      }
-    }
-
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 60px 20px 40px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 60px;
-      animation: fadeInUp 1s ease-out forwards;
-    }
-
-    .title {
-      font-size: 4rem;
-      font-weight: bold;
-      margin-bottom: 20px;
-      position: relative;
-      color: #fff;
-      text-shadow: 0 0 20px rgba(128, 0, 128, 0.7);
-      animation: pulse 2s infinite alternate;
-    }
-
-    .title::after {
-      content: '';
-      position: absolute;
-      bottom: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 200px;
-      height: 4px;
-      background: linear-gradient(90deg, transparent, #800080, transparent);
-      border-radius: 2px;
-      animation: glow 1.5s ease-in-out infinite alternate;
-    }
-
-    .subtitle {
-      font-size: 1.5rem;
-      color: #b0b0b0;
-      margin-top: 20px;
-      animation: fadeIn 1.5s ease-out 0.5s forwards;
-      opacity: 0;
-    }
-
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-      margin-bottom: 60px;
-    }
-
-    .card {
-      background: rgba(40, 40, 40, 0.8);
-      border-radius: 15px;
-      padding: 30px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(128, 0, 128, 0.2);
-      animation: fadeInUp 0.8s ease-out forwards;
-      opacity: 0;
-      transform: translateY(30px);
-    }
-
-    .card:nth-child(1) { animation-delay: 0.2s; }
-    .card:nth-child(2) { animation-delay: 0.4s; }
-    .card:nth-child(3) { animation-delay: 0.6s; }
-    .card:nth-child(4) { animation-delay: 0.8s; }
-
-    .card:hover {
-      transform: translateY(-10px) scale(1.03);
-      box-shadow: 0 15px 40px rgba(128, 0, 128, 0.4);
-      border-color: rgba(128, 0, 128, 0.5);
-    }
-
-    .card-image {
-      width: 100%;
-      height: 200px;
-      background: linear-gradient(45deg, #2a2a2a, #3a3a3a);
-      border-radius: 10px;
-      margin-bottom: 20px;
-      position: relative;
-      overflow: hidden;
       display: flex;
-      align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      background: #000;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid #333;
+      z-index: 100;
     }
 
-    .card-image::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(128, 0, 128, 0.2), transparent);
-      transform: rotate(45deg);
-      transition: all 0.6s ease;
-    }
-
-    .card:hover .card-image::before {
-      transform: rotate(45deg) translate(50%, 50%);
-    }
-
-    .card-title {
-      font-size: 1.8rem;
-      margin-bottom: 15px;
-      color: #fff;
-    }
-
-    .card-content {
-      color: #ccc;
-      line-height: 1.6;
-    }
-
-    .dock {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
+    .nav-buttons {
       display: flex;
-      gap: 15px;
-      padding: 15px 20px;
-      background: rgba(30, 30, 30, 0.8);
+      gap: 1.5rem;
+    }
+
+    .nav-buttons a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 1rem;
+      font-family: monospace;
+      padding: 0.5rem 1rem;
       border-radius: 20px;
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(128, 0, 128, 0.3);
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      z-index: 1000;
+      transition: background 0.3s, color 0.3s;
     }
 
-    .dock-item {
-      width: 60px;
-      height: 60px;
-      background: rgba(60, 60, 60, 0.9);
-      border-radius: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .nav-buttons a:hover {
+      background: #333;
+      color: #ff0; /* 悬停高亮 */
+    }
+
+    /* —————— 原有 Bouncy 样式 —————— */
+    h1 {
       font-size: 1.5rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
+      font-weight: bold;
+      letter-spacing: 0.25rem;
+    }
+
+    p {
+      font-size: 0.75rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    .radio-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
       position: relative;
-      overflow: hidden;
-      border: 1px solid rgba(128, 0, 128, 0.2);
     }
 
-    .dock-item:hover {
-      transform: scale(1.2) translateY(-10px);
-      background: rgba(128, 0, 128, 0.3);
-      box-shadow: 0 5px 15px rgba(128, 0, 128, 0.4);
-      border-color: #800080;
+    .radio-group input[type="radio"] {
+      display: none;
     }
 
-    .dock-item::before {
-      content: '';
+    .radio-group label {
+      padding: 0.5rem 1.5rem;
+      display: flex;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .selection-indicator-wrapper {
+      --transition-duration: 0.3s;
+      --morph-factor: 0;
+      width: 33.33%;
+      height: 100%;
       position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-      transform: rotate(45deg) translate(-100%, -100%);
-    }
-
-    .dock-item:hover::before {
-      animation: shine 0.6s ease;
-    }
-
-    .dock-label {
-      position: absolute;
-      bottom: 100%;
-      left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: rgba(128, 0, 128, 0.9);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 0.8rem;
-      white-space: nowrap;
-      opacity: 0;
-      transition: all 0.3s ease;
+      z-index: 1;
+      mix-blend-mode: difference;
+      transition-duration: var(--transition-duration);
+      transition-timing-function: cubic-bezier(
+        0.25,
+        calc(var(--bounciness) / 10),
+        0.5,
+        1
+      );
+      left: 0;
+      top: 50%;
+      transform: translate(calc(var(--morph-factor) * 10%), -50%);
+      scale: calc(1 + var(--morph-factor) * var(--morph-factor) * 0.05)
+             calc(1 - var(--morph-factor) * var(--morph-factor) * 0.1);
       pointer-events: none;
     }
 
-    .dock-item:hover .dock-label {
-      opacity: 1;
-      transform: translateX(-50%) translateY(-5px);
+    .selection-indicator-wrapper > span {
+      background-color: white;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 100px;
+      transition-duration: calc(1.25 * var(--transition-duration));
+      transition-timing-function: cubic-bezier(
+        0.95,
+        calc(0.5 * var(--bounciness)),
+        0,
+        1
+      );
     }
 
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .radio-group input[type="radio"]:nth-of-type(2):checked ~ .selection-indicator-wrapper {
+      left: 33.33%;
     }
 
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-      }
+    .radio-group input[type="radio"]:nth-of-type(3):checked ~ .selection-indicator-wrapper {
+      left: 66.66%;
     }
 
-    @keyframes pulse {
-      0% {
-        text-shadow: 0 0 10px rgba(128, 0, 128, 0.5);
-      }
-      100% {
-        text-shadow: 0 0 20px rgba(128, 0, 128, 0.8), 0 0 30px rgba(128, 0, 128, 0.6);
-      }
+    /* 悬停和点击反馈（简化版，避免复杂逻辑冲突） */
+    .radio-group label:hover ~ .selection-indicator-wrapper,
+    .radio-group label:focus-visible ~ .selection-indicator-wrapper {
+      --morph-factor: -0.5;
     }
 
-    @keyframes glow {
-      from {
-        opacity: 0.6;
-      }
-      to {
-        opacity: 1;
-      }
+    .radio-group label:active ~ .selection-indicator-wrapper {
+      --morph-factor: 0.5;
+      --transition-duration: 0.1s;
     }
 
-    @keyframes shine {
-      to {
-        transform: rotate(45deg) translate(0, 0);
-      }
-    }
-
-    @media (max-width: 768px) {
-      .title {
-        font-size: 2.5rem;
-      }
-      .subtitle {
-        font-size: 1.2rem;
-      }
-      .cards-grid {
-        grid-template-columns: 1fr;
-      }
-      .dock {
-        bottom: 15px;
-        left: 15px;
-        right: 15px;
-        transform: none;
-        justify-content: center;
-      }
+    .link {
+      position: fixed;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      color: #888;
+      text-decoration: none;
+      font-size: 0.75rem;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <header class="header">
-      <h1 class="title">学校公告系统</h1>
-      <p class="subtitle">最新通知与重要信息</p>
-    </header>
-
-    <main>
-      <section class="cards-grid">
-        <div class="card">
-          <div class="card-image">🚨</div>
-          <h2 class="card-title">紧急通知</h2>
-          <p class="card-content">关于本周五全校停电检修的通知，请各部门提前做好准备，关闭重要设备。</p>
-        </div>
-        <div class="card">
-          <div class="card-image">📅</div>
-          <h2 class="card-title">活动安排</h2>
-          <p class="card-content">春季运动会将于下月举行，各班级需在本周五前提交参赛名单。</p>
-        </div>
-        <div class="card">
-          <div class="card-image">📝</div>
-          <h2 class="card-title">考试信息</h2>
-          <p class="card-content">期末考试时间表已发布，请同学们及时查看个人考试安排，做好复习准备。</p>
-        </div>
-        <div class="card">
-          <div class="card-image">📰</div>
-          <h2 class="card-title">校园新闻</h2>
-          <p class="card-content">我校获得市级教育创新奖，感谢全体师生的共同努力与支持。</p>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <nav class="dock">
-    <div class="dock-item">
-      <span>🏠</span>
-      <div class="dock-label">首页</div>
-    </div>
-    <div class="dock-item">
-      <span>📢</span>
-      <div class="dock-label">公告</div>
-    </div>
-    <div class="dock-item">
-      <span>📅</span>
-      <div class="dock-label">日历</div>
-    </div>
-    <div class="dock-item">
-      <span>⚙️</span>
-      <div class="dock-label">设置</div>
+  <!-- 导航栏 -->
+  <nav class="navbar">
+    <div class="nav-buttons">
+      <a href="index.html">首页</a>
+      <a href="search.html">搜索</a>
+      <a href="settings.html">设置</a>
     </div>
   </nav>
+
+  <!-- 原有内容 -->
+  <h1>BOUNCY</h1>
+  <p>change the bounciness in the CSS!</p>
+  <div class="radio-group">
+    <input type="radio" id="Number 1" name="mode" value="1" checked />
+    <label for="Number 1">Time</label>
+
+    <input type="radio" id="Number 2" name="mode" value="2" />
+    <label for="Number 2">Words</label>
+
+    <input type="radio" id="Number 3" name="mode" value="3" />
+    <label for="Number 3">Infinite</label>
+
+    <div class="selection-indicator-wrapper">
+      <span class="selection-indicator"></span>
+    </div>
+  </div>
+
+  <a href="http://cooltypinggame.com" target="_blank" class="link">view source</a>
+
+  <script>
+    // made for cooltypinggame.com
+    // 你可以在这里添加 JS 功能，比如点击导航跳转或保存设置
+  </script>
 </body>
 </html>

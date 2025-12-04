@@ -1,1 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BOUNCY</title>
+  <style>
+    :root {
+      --bounciness: 15;
+    }
 
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: monospace, system-ui;
+      background: #000;
+      color: #fff;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      /* 顶部留出导航空间 */
+      padding-top: 4.5rem;
+      gap: 1.5rem;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: bold;
+      letter-spacing: 0.25rem;
+    }
+
+    p {
+      font-size: 0.75rem;
+    }
+
+    /* —————— 通用 Bouncy 按钮组样式 —————— */
+    .bouncy-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      position: relative;
+      width: min(90%, 400px); /* 限制宽度，更精致 */
+    }
+
+    .bouncy-group input[type="radio"] {
+      display: none;
+    }
+
+    .bouncy-group label {
+      padding: 0.5rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.9rem;
+      cursor: pointer;
+    }
+
+    .selection-indicator-wrapper {
+      --transition-duration: 0.3s;
+      --morph-factor: 0;
+      width: 33.33%;
+      height: 100%;
+      position: absolute;
+      z-index: 1;
+      mix-blend-mode: difference;
+      transition-duration: var(--transition-duration);
+      transition-timing-function: cubic-bezier(
+        0.25,
+        calc(var(--bounciness) / 10),
+        0.5,
+        1
+      );
+      left: 0;
+      top: 50%;
+      transform: translate(calc(var(--morph-factor) * 10%), -50%);
+      scale: calc(1 + var(--morph-factor) * var(--morph-factor) * 0.05)
+             calc(1 - var(--morph-factor) * var(--morph-factor) * 0.1);
+      pointer-events: none;
+    }
+
+    .selection-indicator-wrapper > span {
+      background-color: white;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-radius: 100px;
+      transition-duration: calc(1.25 * var(--transition-duration));
+      transition-timing-function: cubic-bezier(
+        0.95,
+        calc(0.5 * var(--bounciness)),
+        0,
+        1
+      );
+    }
+
+    /* —————— 导航条：固定在顶部 —————— */
+    .navbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      padding: 1rem 0;
+      background: #000;
+      z-index: 100;
+    }
+
+    /* 导航指示器偏移 */
+    .navbar .bouncy-group input[type="radio"]:nth-of-type(2):checked ~ .selection-indicator-wrapper {
+      left: 33.33%;
+    }
+    .navbar .bouncy-group input[type="radio"]:nth-of-type(3):checked ~ .selection-indicator-wrapper {
+      left: 66.66%;
+    }
+
+    /* —————— 主内容区模式选择 —————— */
+    .mode-selector {
+      margin-top: 1rem;
+    }
+
+    .mode-selector input[type="radio"]:nth-of-type(2):checked ~ .selection-indicator-wrapper {
+      left: 33.33%;
+    }
+    .mode-selector input[type="radio"]:nth-of-type(3):checked ~ .selection-indicator-wrapper {
+      left: 66.66%;
+    }
+
+    /* 简化悬停反馈（避免复杂嵌套） */
+    .bouncy-group label:hover ~ .selection-indicator-wrapper,
+    .bouncy-group label:focus-visible ~ .selection-indicator-wrapper {
+      --morph-factor: -0.8;
+    }
+
+    .bouncy-group label:active ~ .selection-indicator-wrapper {
+      --morph-factor: 0.8;
+      --transition-duration: 0.1s;
+    }
+
+    .link {
+      position: fixed;
+      bottom: 0.5rem;
+      right: 0.5rem;
+      color: #888;
+      text-decoration: none;
+      font-size: 0.75rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- 顶部导航（Bouncy 风格） -->
+  <nav class="navbar">
+    <div class="bouncy-group">
+      <input type="radio" id="nav-home" name="nav" checked />
+      <label for="nav-home">首页</label>
+
+      <input type="radio" id="nav-search" name="nav" />
+      <label for="nav-search">搜索</label>
+
+      <input type="radio" id="nav-settings" name="nav" />
+      <label for="nav-settings">设置</label>
+
+      <div class="selection-indicator-wrapper">
+        <span class="selection-indicator"></span>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 主内容 -->
+  <h1>BOUNCY</h1>
+  <p>change the bounciness in the CSS!</p>
+  
+  <div class="bouncy-group mode-selector">
+    <input type="radio" id="mode-time" name="mode" value="1" checked />
+    <label for="mode-time">Time</label>
+
+    <input type="radio" id="mode-words" name="mode" value="2" />
+    <label for="mode-words">Words</label>
+
+    <input type="radio" id="mode-infinite" name="mode" value="3" />
+    <label for="mode-infinite">Infinite</label>
+
+    <div class="selection-indicator-wrapper">
+      <span class="selection-indicator"></span>
+    </div>
+  </div>
+
+  <a href="http://cooltypinggame.com" target="_blank" class="link">view source</a>
+
+  <script>
+    // made for cooltypinggame.com
+    // 如果需要页面跳转，可以在这里监听 radio change
+    document.querySelectorAll('.navbar input[type="radio"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        const id = radio.id;
+        if (id === 'nav-home') {
+          // window.location.href = 'index.html';
+        } else if (id === 'nav-search') {
+          // window.location.href = 'search.html';
+        } else if (id === 'nav-settings') {
+          // window.location.href = 'settings.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

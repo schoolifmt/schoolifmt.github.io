@@ -3,9 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>极致现代公告系统</title>
+    <title>智慧校园公告系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        :root {
+            /* 浅色模式变量 */
+            --bg-primary: #f5f5f5;
+            --bg-secondary: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --border-color: rgba(0, 0, 0, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --accent-color: #000000;
+            --accent-hover: #333333;
+            --logo-bg: #ffffff;
+            --logo-text: #000000;
+            --blob-color-1: rgba(0, 0, 0, 0.03);
+            --blob-color-2: rgba(0, 0, 0, 0.02);
+            --blob-color-3: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="dark"] {
+            /* 深色模式变量 */
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #ffffff;
+            --text-secondary: #cccccc;
+            --text-muted: #888888;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --accent-color: #ffffff;
+            --accent-hover: #f0f0f0;
+            --logo-bg: #1a1a1a;
+            --logo-text: #ffffff;
+            --blob-color-1: rgba(255, 255, 255, 0.03);
+            --blob-color-2: rgba(255, 255, 255, 0.02);
+            --blob-color-3: rgba(255, 255, 255, 0.04);
+        }
 
         * {
             margin: 0;
@@ -13,574 +50,137 @@
             box-sizing: border-box;
         }
 
-        :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #ec4899;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark: #0f172a;
-            --dark-light: #1e293b;
-            --gray: #64748b;
-            --light: #f1f5f9;
-            --white: #ffffff;
-        }
-
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--dark);
-            color: var(--white);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-primary);
             min-height: 100vh;
-            padding: 0;
-            overflow-x: hidden;
             position: relative;
+            color: var(--text-primary);
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
-        /* 动态背景 */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(236, 72, 153, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
-            z-index: 0;
-            animation: bgShift 20s ease infinite;
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
         }
 
-        @keyframes bgShift {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.8; }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 40px 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 顶部导航栏 */
-        .navbar {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 20px 30px;
-            margin-bottom: 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5em;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .logo-icon {
-            width: 48px;
-            height: 48px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4em;
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
-        }
-
-        .nav-stats {
-            display: flex;
-            gap: 24px;
-            align-items: center;
-        }
-
-        .stat-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .stat-number {
-            font-size: 1.5em;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .stat-label {
-            font-size: 0.75em;
-            color: var(--gray);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        /* 主内容区 */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 480px 1fr;
-            gap: 30px;
-            align-items: start;
-        }
-
-        @media (max-width: 1200px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* 发布卡片 */
-        .publish-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 32px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            position: sticky;
-            top: 20px;
-            animation: slideRight 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .card-header {
-            margin-bottom: 28px;
-        }
-
-        .card-title {
-            font-size: 1.75em;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, var(--white) 0%, var(--gray) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .card-subtitle {
-            color: var(--gray);
-            font-size: 0.95em;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-            animation: fadeInUp 0.5s ease backwards;
-        }
-
-        .form-group:nth-child(1) { animation-delay: 0.1s; }
-        .form-group:nth-child(2) { animation-delay: 0.15s; }
-        .form-group:nth-child(3) { animation-delay: 0.2s; }
-        .form-group:nth-child(4) { animation-delay: 0.25s; }
-
-        label {
-            display: block;
-            margin-bottom: 10px;
-            font-weight: 600;
-            font-size: 0.9em;
-            color: var(--light);
-            letter-spacing: 0.5px;
-        }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 14px 18px;
-            background: rgba(15, 23, 42, 0.6);
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 1em;
-            font-family: inherit;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            outline: none;
-        }
-
-        input:focus, textarea:focus, select:focus {
-            border-color: var(--primary);
-            background: rgba(15, 23, 42, 0.8);
-            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1), 0 8px 24px rgba(99, 102, 241, 0.2);
-            transform: translateY(-2px);
-        }
-
-        textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-
-        select {
-            cursor: pointer;
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23ffffff'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 12px center;
-            background-size: 20px;
-            padding-right: 40px;
-        }
-
-        /* 按钮样式 */
-        .btn-primary {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            border: none;
-            border-radius: 14px;
-            color: var(--white);
-            font-size: 1.05em;
-            font-weight: 600;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn-primary:hover::before {
-            left: 100%;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.5);
-        }
-
-        .btn-primary:active {
-            transform: translateY(-1px);
-        }
-
-        /* 帖子区域 */
-        .posts-section {
-            animation: slideLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .section-title {
-            font-size: 1.75em;
-            font-weight: 700;
-        }
-
-        .filter-tabs {
-            display: flex;
-            gap: 8px;
-            background: rgba(30, 41, 59, 0.6);
-            padding: 6px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .filter-tab {
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            background: transparent;
-            color: var(--gray);
-        }
-
-        .filter-tab.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-            color: var(--white);
-            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-        }
-
-        .posts-grid {
-            display: grid;
-            gap: 20px;
-        }
-
-        /* 帖子卡片 */
-        .post-card {
-            background: rgba(30, 41, 59, 0.6);
-            backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 28px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: scaleIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-        }
-
-        .post-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
-        }
-
-        .post-card:hover::before {
-            transform: scaleX(1);
-        }
-
-        .post-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 255, 255, 0.2);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4);
-        }
-
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 16px;
-            gap: 16px;
-        }
-
-        .post-title {
-            font-size: 1.4em;
-            font-weight: 700;
-            color: var(--white);
-            line-height: 1.3;
-            flex: 1;
-        }
-
-        .post-badge {
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: 0.75em;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            white-space: nowrap;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        }
-
-        .badge-post {
-            background: linear-gradient(135deg, #3b82f6, #2563eb);
-        }
-
-        .badge-announcement {
-            background: linear-gradient(135deg, #ec4899, #db2777);
-        }
-
-        .badge-notice {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-        }
-
-        .post-content {
-            color: var(--gray);
-            line-height: 1.7;
-            margin-bottom: 20px;
-            font-size: 0.98em;
-        }
-
-        .post-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: 16px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .post-meta {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            color: var(--gray);
-            font-size: 0.9em;
-        }
-
-        .post-author {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .author-avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9em;
-            font-weight: 700;
-        }
-
-        .post-date {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .btn-delete {
-            padding: 8px 16px;
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+        ::-webkit-scrollbar-track {
+            background: var(--border-color);
             border-radius: 10px;
-            color: var(--danger);
-            font-size: 0.9em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
         }
 
-        .btn-delete:hover {
-            background: var(--danger);
-            color: var(--white);
-            transform: scale(1.05);
-            box-shadow: 0 4px 16px rgba(239, 68, 68, 0.4);
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 10px;
+            transition: all 0.3s;
         }
 
-        /* 空状态 */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            animation: fadeIn 0.6s ease;
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
         }
 
-        .empty-icon {
-            font-size: 5em;
-            margin-bottom: 20px;
-            opacity: 0.3;
+        /* 玻璃态效果 - 保持不变 */
+        .glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 30px var(--shadow-color);
+        }
+
+        [data-theme="dark"] .glass {
+            background: rgba(26, 26, 26, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-dark {
+            background: rgba(30, 30, 30, 0.9);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* 卡片悬浮效果 */
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            will-change: transform;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px var(--shadow-color);
+        }
+
+        /* 按钮波纹效果 */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: var(--shadow-color);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* 悬浮按钮动画 */
+        .fab-button {
             animation: float 3s ease-in-out infinite;
         }
 
-        .empty-text {
-            font-size: 1.2em;
-            color: var(--gray);
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
 
-        /* 通知 */
-        .notification {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 20px 24px;
-            border-radius: 16px;
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1), slideOutRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) 2.5s forwards;
-            min-width: 300px;
+        /* 标签动画 */
+        .tag-badge {
+            transition: all 0.3s;
         }
 
-        .notification-icon {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4em;
-            flex-shrink: 0;
+        .tag-badge:hover {
+            transform: scale(1.1) rotate(2deg);
         }
 
-        .notification.success .notification-icon {
-            background: linear-gradient(135deg, var(--success), #059669);
+        /* 搜索框动画 */
+        .search-box {
+            transition: all 0.3s;
         }
 
-        .notification-content {
-            flex: 1;
+        .search-box:focus-within {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px var(--shadow-color);
         }
 
-        .notification-title {
-            font-weight: 700;
-            margin-bottom: 4px;
+        /* 侧边栏动画 */
+        .sidebar {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .notification-message {
-            font-size: 0.9em;
-            color: var(--gray);
+        .sidebar.collapsed {
+            transform: translateX(-100%);
         }
 
-        /* 动画 */
-        @keyframes slideDown {
+        /* 模态框动画 */
+        .modal {
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
             from {
                 opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes slideRight {
-            from {
-                opacity: 0;
-                transform: translateX(-40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes slideLeft {
-            from {
-                opacity: 0;
-                transform: translateX(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
+                transform: scale(0.9);
             }
             to {
                 opacity: 1;
@@ -588,275 +188,980 @@
             }
         }
 
-        @keyframes slideInRight {
-            from {
-                transform: translateX(400px);
-                opacity: 0;
+        /* 加载动画 */
+        .loader {
+            border: 3px solid var(--border-color);
+            border-radius: 50%;
+            border-top: 3px solid var(--accent-color);
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 通知徽章动画 */
+        .notification-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
             }
-            to {
-                transform: translateX(0);
-                opacity: 1;
+            70% {
+                box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
             }
         }
 
-        @keyframes slideOutRight {
-            to {
-                transform: translateX(400px);
-                opacity: 0;
+        /* LogoLoop样式 - 优化版本 */
+        .logoloop {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            height: 120px;
+            background: var(--logo-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            margin: 30px 0;
+            transition: background-color 0.3s ease;
+        }
+
+        .logoloop__track {
+            display: flex;
+            width: max-content;
+            will-change: transform;
+            user-select: none;
+            position: relative;
+            z-index: 0;
+            height: 100%;
+            align-items: center;
+        }
+
+        .logoloop__list {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logoloop__item {
+            flex: 0 0 auto;
+            margin-right: 40px;
+            font-size: 28px;
+            line-height: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .logoloop__item:hover {
+            transform: scale(1.2);
+        }
+
+        .logoloop__item img {
+            height: 48px;
+            width: auto;
+            display: block;
+            object-fit: contain;
+            -webkit-user-drag: none;
+            pointer-events: none;
+        }
+
+        .logoloop__node {
+            display: inline-flex;
+            align-items: center;
+            color: var(--logo-text);
+            transition: color 0.3s ease;
+        }
+
+        .logoloop__link {
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: opacity 0.2s ease;
+        }
+
+        .logoloop__link:hover {
+            opacity: 0.8;
+        }
+
+        .logoloop__link:focus-visible {
+            outline: 2px solid currentColor;
+            outline-offset: 2px;
+        }
+
+        .logoloop--fade::before,
+        .logoloop--fade::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: clamp(24px, 8%, 120px);
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .logoloop--fade::before {
+            left: 0;
+            background: linear-gradient(
+                to right,
+                var(--logo-bg) 0%,
+                transparent 100%
+            );
+        }
+
+        .logoloop--fade::after {
+            right: 0;
+            background: linear-gradient(
+                to left,
+                var(--logo-bg) 0%,
+                transparent 100%
+            );
+        }
+
+        /* 优化背景动画 */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.6;
+            will-change: transform;
+            animation: blob-float 20s infinite ease-in-out;
+        }
+
+        @keyframes blob-float {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+            }
+            25% {
+                transform: translate(100px, -50px) scale(1.1);
+            }
+            50% {
+                transform: translate(-50px, 100px) scale(0.9);
+            }
+            75% {
+                transform: translate(-100px, -30px) scale(1.05);
             }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
+        /* 主题切换按钮 */
+        .theme-toggle {
+            position: relative;
+            width: 60px;
+            height: 30px;
+            background: var(--border-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+        .theme-toggle-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+        }
+
+        [data-theme="dark"] .theme-toggle-slider {
+            transform: translateX(30px);
+        }
+
+        /* 美化筛选分类 */
+        .category-btn {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .category-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .category-btn:hover::before {
+            left: 100%;
+        }
+
+        .category-btn.active {
+            background: var(--accent-color);
+            color: var(--bg-primary);
+            transform: translateX(5px);
+        }
+
+        .category-btn.active .category-count {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .category-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .category-btn:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .category-count {
+            transition: all 0.3s ease;
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 768px) {
+            .sidebar {
+                position: fixed;
+                z-index: 40;
+                height: 100vh;
+            }
+            
+            .logoloop__item {
+                margin-right: 20px;
+            }
+            
+            .logoloop__item img {
+                height: 36px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- 导航栏 -->
-        <nav class="navbar">
-            <div class="logo">
-                <div class="logo-icon">✨</div>
-                <span>公告发布系统</span>
-            </div>
-            <div class="nav-stats">
-                <div class="stat-item">
-                    <div class="stat-number" id="totalPosts">0</div>
-                    <div class="stat-label">总帖子</div>
+    <!-- 优化后的背景装饰 -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="blob blob-1" style="width: 400px; height: 400px; background: var(--blob-color-1); top: -200px; right: -200px; animation-delay: 0s;"></div>
+        <div class="blob blob-2" style="width: 350px; height: 350px; background: var(--blob-color-2); bottom: -175px; left: -175px; animation-delay: 5s;"></div>
+        <div class="blob blob-3" style="width: 300px; height: 300px; background: var(--blob-color-3); top: 50%; left: 50%; transform: translate(-50%, -50%); animation-delay: 10s;"></div>
+    </div>
+
+    <!-- 顶部导航栏 -->
+    <header class="glass sticky top-0 z-30 px-6 py-4">
+        <nav class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button id="sidebarToggle" class="lg:hidden" style="color: var(--text-primary);" class="hover:opacity-80 transition">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: var(--accent-color);">
+                        <i class="fas fa-graduation-cap text-white"></i>
+                    </div>
+                    <h1 class="text-2xl font-bold" style="color: var(--text-primary);">智慧校园</h1>
                 </div>
-                <div class="stat-item">
-                    <div class="stat-number" id="todayPosts">0</div>
-                    <div class="stat-label">今日发布</div>
+            </div>
+
+            <!-- 搜索框 -->
+            <div class="search-box glass rounded-full px-6 py-3 flex items-center space-x-3 max-w-md flex-1 mx-8">
+                <i class="fas fa-search" style="color: var(--text-muted);"></i>
+                <input type="text" id="searchInput" placeholder="搜索公告..." 
+                    class="bg-transparent outline-none flex-1" 
+                    style="color: var(--text-primary);"
+                    placeholder-style="color: var(--text-muted);">
+            </div>
+
+            <!-- 用户菜单 -->
+            <div class="flex items-center space-x-4">
+                <button class="relative hover:opacity-80 transition" style="color: var(--text-primary);">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="notification-badge absolute -top-2 -right-2 w-5 h-5 bg-red-500 rounded-full text-xs flex items-center justify-center text-white">3</span>
+                </button>
+                
+                <!-- 主题切换 -->
+                <div class="theme-toggle" onclick="toggleTheme()">
+                    <div class="theme-toggle-slider">
+                        <i class="fas fa-sun text-xs" id="themeIcon"></i>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-2 cursor-pointer hover:opacity-80 transition">
+                    <img src="https://picsum.photos/seed/user/40/40" alt="用户头像" class="w-10 h-10 rounded-full border-2" style="border-color: var(--border-color);">
+                    <span class="hidden md:block" style="color: var(--text-primary);">管理员</span>
                 </div>
             </div>
         </nav>
+    </header>
 
-        <!-- 主内容 -->
-        <div class="main-grid">
-            <!-- 发布表单 -->
-            <div class="publish-card">
-                <div class="card-header">
-                    <h2 class="card-title">创建新内容</h2>
-                    <p class="card-subtitle">分享您的想法和公告</p>
-                </div>
-                <form id="postForm">
-                    <div class="form-group">
-                        <label for="postType">📂 内容类型</label>
-                        <select id="postType" required>
-                            <option value="post">普通帖子</option>
-                            <option value="announcement">重要公告</option>
-                            <option value="notice">系统通知</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="postTitle">📝 标题</label>
-                        <input type="text" id="postTitle" placeholder="输入一个吸引人的标题..." required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="postContent">💬 内容</label>
-                        <textarea id="postContent" placeholder="详细描述您的内容..." required></textarea>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="postAuthor">👤 作者</label>
-                        <input type="text" id="postAuthor" placeholder="输入您的名字..." required>
-                    </div>
-
-                    <button type="submit" class="btn-primary">
-                        🚀 立即发布
-                    </button>
-                </form>
+    <div class="container mx-auto px-4 py-8 flex gap-6">
+        <!-- 美化后的侧边栏 -->
+        <aside id="sidebar" class="sidebar w-64 glass rounded-2xl p-6 h-fit sticky top-24">
+            <h2 class="text-lg font-semibold mb-6 flex items-center" style="color: var(--text-primary);">
+                <i class="fas fa-filter mr-2"></i>
+                筛选分类
+            </h2>
+            
+            <div class="space-y-3">
+                <button class="category-btn active w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group" data-category="all" style="color: var(--text-primary);">
+                    <span class="flex items-center">
+                        <i class="fas fa-border-all category-icon mr-3"></i>
+                        全部公告
+                    </span>
+                    <span class="category-count px-2 py-1 rounded-full text-xs">128</span>
+                </button>
+                
+                <button class="category-btn w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-gray-800" data-category="academic" style="color: var(--text-primary);">
+                    <span class="flex items-center">
+                        <i class="fas fa-book category-icon mr-3"></i>
+                        学术通知
+                    </span>
+                    <span class="category-count px-2 py-1 rounded-full text-xs" style="background: var(--border-color);">45</span>
+                </button>
+                
+                <button class="category-btn w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-gray-800" data-category="activity" style="color: var(--text-primary);">
+                    <span class="flex items-center">
+                        <i class="fas fa-calendar-alt category-icon mr-3"></i>
+                        校园活动
+                    </span>
+                    <span class="category-count px-2 py-1 rounded-full text-xs" style="background: var(--border-color);">32</span>
+                </button>
+                
+                <button class="category-btn w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-gray-800" data-category="recruitment" style="color: var(--text-primary);">
+                    <span class="flex items-center">
+                        <i class="fas fa-briefcase category-icon mr-3"></i>
+                        招聘信息
+                    </span>
+                    <span class="category-count px-2 py-1 rounded-full text-xs" style="background: var(--border-color);">28</span>
+                </button>
+                
+                <button class="category-btn w-full text-left px-4 py-3 rounded-lg flex items-center justify-between group hover:bg-gray-100 dark:hover:bg-gray-800" data-category="policy" style="color: var(--text-primary);">
+                    <span class="flex items-center">
+                        <i class="fas fa-gavel category-icon mr-3"></i>
+                        政策规定
+                    </span>
+                    <span class="category-count px-2 py-1 rounded-full text-xs" style="background: var(--border-color);">23</span>
+                </button>
             </div>
 
-            <!-- 帖子列表 -->
-            <div class="posts-section">
-                <div class="section-header">
-                    <h2 class="section-title">📋 内容列表</h2>
-                    <div class="filter-tabs">
-                        <button class="filter-tab active" data-filter="all">全部</button>
-                        <button class="filter-tab" data-filter="post">帖子</button>
-                        <button class="filter-tab" data-filter="announcement">公告</button>
-                        <button class="filter-tab" data-filter="notice">通知</button>
+            <div class="mt-8 pt-6" style="border-top: 1px solid var(--border-color);">
+                <h3 class="text-sm font-semibold mb-4" style="color: var(--text-primary);">快速统计</h3>
+                <div class="space-y-2">
+                    <div class="flex justify-between text-sm" style="color: var(--text-secondary);">
+                        <span>今日发布</span>
+                        <span class="font-semibold">12</span>
+                    </div>
+                    <div class="flex justify-between text-sm" style="color: var(--text-secondary);">
+                        <span>本周热门</span>
+                        <span class="font-semibold">8</span>
+                    </div>
+                    <div class="flex justify-between text-sm" style="color: var(--text-secondary);">
+                        <span>待审核</span>
+                        <span class="font-semibold text-yellow-600">5</span>
                     </div>
                 </div>
-                <div class="posts-grid" id="postsContainer">
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <p class="empty-text">还没有任何内容<br>快来发布第一条吧！</p>
+            </div>
+        </aside>
+
+        <!-- 主内容区 -->
+        <main class="flex-1">
+            <!-- 优化后的LogoLoop -->
+            <div class="logoloop logoloop--fade" id="partnerLogos">
+                <div class="logoloop__track" id="logoTrack">
+                    <div class="logoloop__list" id="logoList">
+                        <!-- 动态生成的logo -->
                     </div>
                 </div>
+            </div>
+
+            <!-- 公告卡片网格 -->
+            <div id="announcementsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- 动态生成的公告卡片 -->
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-12">
+                <button id="loadMoreBtn" class="glass px-8 py-3 rounded-full ripple hover:opacity-80 transition" style="color: var(--text-primary);">
+                    <i class="fas fa-arrow-down mr-2"></i>
+                    加载更多
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- 悬浮发布按钮 -->
+    <button id="fabButton" class="fab-button fixed bottom-8 right-8 w-16 h-16 rounded-full shadow-2xl flex items-center justify-center text-white hover:scale-110 transition-transform z-20" style="background: var(--accent-color);">
+        <i class="fas fa-plus text-2xl"></i>
+    </button>
+
+    <!-- 发布公告模态框 -->
+    <div id="publishModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closePublishModal()"></div>
+        <div class="modal glass-dark rounded-2xl p-8 max-w-2xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closePublishModal()" class="absolute top-4 right-4 text-gray-300 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <h2 class="text-2xl font-bold text-white mb-6">发布新公告</h2>
+            
+            <form id="publishForm" class="space-y-4">
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">公告标题</label>
+                    <input type="text" id="titleInput" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 outline-none focus:border-white/40 transition" placeholder="请输入公告标题" required>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">公告分类</label>
+                    <select id="categorySelect" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white outline-none focus:border-white/40 transition">
+                        <option value="academic">学术通知</option>
+                        <option value="activity">校园活动</option>
+                        <option value="recruitment">招聘信息</option>
+                        <option value="policy">政策规定</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">公告内容</label>
+                    <textarea id="contentInput" rows="6" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 outline-none focus:border-white/40 transition resize-none" placeholder="请输入公告内容" required></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-gray-300 text-sm mb-2">附件上传</label>
+                    <div class="border-2 border-dashed border-white/30 rounded-lg p-6 text-center hover:border-white/50 transition cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+                        <p class="text-gray-400 text-sm">点击或拖拽文件到此处上传</p>
+                        <p class="text-gray-500 text-xs mt-1">支持 PDF, DOC, DOCX 格式，最大 10MB</p>
+                    </div>
+                </div>
+                
+                <div class="flex justify-end space-x-3 pt-4">
+                    <button type="button" onclick="closePublishModal()" class="px-6 py-3 rounded-lg bg-white/10 text-white hover:bg-white/20 transition">
+                        取消
+                    </button>
+                    <button type="submit" class="px-6 py-3 rounded-lg bg-gray-800 text-white hover:bg-gray-700 transition">
+                        <i class="fas fa-paper-plane mr-2"></i>
+                        发布公告
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 公告详情模态框 -->
+    <div id="detailModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeDetailModal()"></div>
+        <div class="modal glass-dark rounded-2xl p-8 max-w-3xl w-full max-h-[90vh] overflow-y-auto relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-gray-300 hover:text-white transition">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+            
+            <div id="detailContent">
+                <!-- 动态填充内容 -->
             </div>
         </div>
     </div>
 
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        let posts = [];
-        let currentFilter = 'all';
+        // 初始化AOS动画库
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100
+        });
 
-        // 初始化
-        function init() {
-            loadPosts();
-            setupEventListeners();
-            updateStats();
+        // 主题切换功能
+        function initTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
         }
 
-        // 加载帖子
-        function loadPosts() {
-            const saved = localStorage.getItem('modernPosts');
-            if (saved) {
-                posts = JSON.parse(saved);
-                renderPosts();
-            }
-        }
-
-        // 保存帖子
-        function savePosts() {
-            localStorage.setItem('modernPosts', JSON.stringify(posts));
-            updateStats();
-        }
-
-        // 设置事件监听
-        function setupEventListeners() {
-            document.getElementById('postForm').addEventListener('submit', handleSubmit);
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
             
-            document.querySelectorAll('.filter-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-                    this.classList.add('active');
-                    currentFilter = this.dataset.filter;
-                    renderPosts();
-                });
-            });
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
         }
 
-        // 提交表单
-        function handleSubmit(e) {
-            e.preventDefault();
-            
-            const newPost = {
-                id: Date.now(),
-                type: document.getElementById('postType').value,
-                title: document.getElementById('postTitle').value,
-                content: document.getElementById('postContent').value,
-                author: document.getElementById('postAuthor').value,
-                date: new Date().toLocaleString('zh-CN', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                }),
-                timestamp: Date.now()
-            };
-
-            posts.unshift(newPost);
-            savePosts();
-            renderPosts();
-            e.target.reset();
-            showNotification('发布成功', '您的内容已成功发布！');
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            icon.className = theme === 'dark' ? 'fas fa-moon text-xs' : 'fas fa-sun text-xs';
         }
 
-        // 渲染帖子
-        function renderPosts() {
-            const container = document.getElementById('postsContainer');
-            const filteredPosts = currentFilter === 'all' 
-                ? posts 
-                : posts.filter(p => p.type === currentFilter);
+        // LogoLoop 配置 - 黑色配色
+        const partnerLogos = [
+            { name: "清华大学", icon: "fa-university" },
+            { name: "北京大学", icon: "fa-graduation-cap" },
+            { name: "复旦大学", icon: "fa-book" },
+            { name: "上海交通大学", icon: "fa-ship" },
+            { name: "浙江大学", icon: "fa-lightbulb" },
+            { name: "南京大学", icon: "fa-landmark" },
+            { name: "中山大学", icon: "fa-torii-gate" },
+            { name: "华中科技大学", icon: "fa-microscope" }
+        ];
 
-            if (filteredPosts.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📭</div>
-                        <p class="empty-text">还没有任何内容<br>快来发布第一条吧！</p>
+        // 优化后的LogoLoop动画
+        let logoTrack = document.getElementById('logoTrack');
+        let logoList = document.getElementById('logoList');
+        let logoPosition = 0;
+        let logoSpeed = 0.5; // 降低速度使其更流畅
+        let lastTimestamp = null;
+        let isHovered = false;
+
+        // 初始化LogoLoop
+        function initLogoLoop() {
+            // 创建logo列表
+            let logoHTML = '';
+            partnerLogos.forEach((logo, index) => {
+                logoHTML += `
+                    <div class="logoloop__item">
+                        <a href="#" class="logoloop__link" title="${logo.name}">
+                            <div class="logoloop__node">
+                                <i class="fas ${logo.icon}"></i>
+                            </div>
+                        </a>
                     </div>
                 `;
-                return;
-            }
+            });
+            
+            // 复制logo列表以实现无缝循环
+            logoList.innerHTML = logoHTML + logoHTML;
+            
+            // 开始优化后的动画
+            requestAnimationFrame(animateLogos);
+        }
 
-            container.innerHTML = filteredPosts.map((post, index) => `
-                <div class="post-card" style="animation-delay: ${index * 0.05}s">
-                    <div class="post-header">
-                        <h3 class="post-title">${post.title}</h3>
-                        <span class="post-badge badge-${post.type}">
-                            ${getTypeLabel(post.type)}
-                        </span>
+        // 优化后的LogoLoop动画函数
+        function animateLogos(timestamp) {
+            if (!lastTimestamp) lastTimestamp = timestamp;
+            
+            const deltaTime = timestamp - lastTimestamp;
+            lastTimestamp = timestamp;
+            
+            if (!isHovered) {
+                logoPosition -= logoSpeed * (deltaTime / 16); // 标准化到60fps
+                
+                // 重置位置以实现无缝循环
+                const logoWidth = logoList.scrollWidth / 2;
+                if (Math.abs(logoPosition) >= logoWidth) {
+                    logoPosition = 0;
+                }
+                
+                // 使用transform而不是改变位置以提高性能
+                logoTrack.style.transform = `translateX(${logoPosition}px)`;
+            }
+            
+            requestAnimationFrame(animateLogos);
+        }
+
+        // 鼠标悬停暂停动画
+        document.getElementById('partnerLogos').addEventListener('mouseenter', () => {
+            isHovered = true;
+        });
+
+        // 鼠标离开恢复动画
+        document.getElementById('partnerLogos').addEventListener('mouseleave', () => {
+            isHovered = false;
+        });
+
+        // 公告数据
+        const announcements = [
+            {
+                id: 1,
+                title: "关于2024年春季学期选课通知",
+                category: "academic",
+                categoryName: "学术通知",
+                content: "各位同学请注意，2024年春季学期选课系统将于下周一开始开放。请同学们提前查看课程目录，合理安排选课计划。选课时间为：2024年1月15日9:00至1月19日17:00。",
+                author: "教务处",
+                date: "2024-01-10",
+                views: 1523,
+                likes: 89,
+                image: "https://picsum.photos/seed/announce1/400/250",
+                tags: ["选课", "教务", "重要"],
+                isPinned: true
+            },
+            {
+                id: 2,
+                title: "校园艺术节报名开始啦！",
+                category: "activity",
+                categoryName: "校园活动",
+                content: "一年一度的校园艺术节即将拉开帷幕！现面向全校学生征集各类艺术作品，包括绘画、摄影、音乐、舞蹈等。获奖作品将有机会在校美术馆展出。",
+                author: "学生会",
+                date: "2024-01-09",
+                views: 892,
+                likes: 156,
+                image: "https://picsum.photos/seed/announce2/400/250",
+                tags: ["艺术节", "报名", "才艺"],
+                isPinned: false
+            },
+            {
+                id: 3,
+                title: "腾讯2024校园招聘宣讲会",
+                category: "recruitment",
+                categoryName: "招聘信息",
+                content: "腾讯公司将于本月20日来我校举办校园招聘宣讲会。招聘岗位包括软件开发、产品经理、设计师等多个职位。欢迎2024届毕业生踊跃参加。",
+                author: "就业指导中心",
+                date: "2024-01-08",
+                views: 2341,
+                likes: 203,
+                image: "https://picsum.photos/seed/announce3/400/250",
+                tags: ["招聘", "腾讯", "就业"],
+                isPinned: true
+            },
+            {
+                id: 4,
+                title: "图书馆寒假开放时间调整",
+                category: "policy",
+                categoryName: "政策规定",
+                content: "根据学校寒假安排，图书馆开放时间将作如下调整：1月20日至2月20日期间，周一至周五9:00-17:00开放，周末闭馆。请同学们提前做好借阅安排。",
+                author: "图书馆",
+                date: "2024-01-07",
+                views: 567,
+                likes: 45,
+                image: "https://picsum.photos/seed/announce4/400/250",
+                tags: ["图书馆", "寒假", "通知"],
+                isPinned: false
+            },
+            {
+                id: 5,
+                title: "优秀学生奖学金申请通知",
+                category: "academic",
+                categoryName: "学术通知",
+                content: "2023-2024学年第一学期优秀学生奖学金申请工作现已开始。申请条件：本学期无挂科科目，综合测评成绩在专业前30%。申请截止日期：1月25日。",
+                author: "学生处",
+                date: "2024-01-06",
+                views: 1876,
+                likes: 134,
+                image: "https://picsum.photos/seed/announce5/400/250",
+                tags: ["奖学金", "申请", "优秀学生"],
+                isPinned: false
+            },
+            {
+                id: 6,
+                title: "网络安全意识培训讲座",
+                category: "activity",
+                categoryName: "校园活动",
+                content: "为提高全校师生的网络安全意识，信息技术中心将举办网络安全培训讲座。内容包括：防范网络诈骗、保护个人信息、安全使用社交媒体等。",
+                author: "信息技术中心",
+                date: "2024-01-05",
+                views: 423,
+                likes: 67,
+                image: "https://picsum.photos/seed/announce6/400/250",
+                tags: ["网络安全", "培训", "讲座"],
+                isPinned: false
+            }
+        ];
+
+        let currentCategory = 'all';
+        let displayedAnnouncements = 6;
+
+        // 渲染公告卡片
+        function renderAnnouncements(category = 'all', limit = 6) {
+            const grid = document.getElementById('announcementsGrid');
+            const filtered = category === 'all' 
+                ? announcements 
+                : announcements.filter(a => a.category === category);
+            
+            const toDisplay = filtered.slice(0, limit);
+            
+            grid.innerHTML = toDisplay.map((announce, index) => `
+                <div class="card-hover glass rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="${index * 100}">
+                    ${announce.isPinned ? '<div class="text-white text-xs px-3 py-1 text-center font-semibold" style="background: var(--accent-color);"><i class="fas fa-thumbtack mr-1"></i>置顶</div>' : ''}
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${announce.image}" alt="${announce.title}" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 right-4">
+                            <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs">
+                                ${announce.categoryName}
+                            </span>
+                        </div>
                     </div>
-                    <div class="post-content">${post.content}</div>
-                    <div class="post-footer">
-                        <div class="post-meta">
-                            <div class="post-author">
-                                <div class="author-avatar">${post.author.charAt(0).toUpperCase()}</div>
-                                <span>${post.author}</span>
-                            </div>
-                            <div class="post-date">
-                                <span>🕐</span>
-                                <span>${post.date}</span>
+                    
+                    <div class="p-6">
+                        <h3 class="font-bold text-lg mb-3 line-clamp-2" style="color: var(--text-primary);">${announce.title}</h3>
+                        <p class="text-sm mb-4 line-clamp-3" style="color: var(--text-secondary);">${announce.content}</p>
+                        
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            ${announce.tags.map(tag => `
+                                <span class="tag-badge px-2 py-1 rounded-full text-xs" style="background: var(--border-color); color: var(--text-secondary);">
+                                    #${tag}
+                                </span>
+                            `).join('')}
+                        </div>
+                        
+                        <div class="flex items-center justify-between text-sm mb-4" style="color: var(--text-muted);">
+                            <div class="flex items-center space-x-3">
+                                <span><i class="fas fa-user mr-1"></i>${announce.author}</span>
+                                <span><i class="fas fa-calendar mr-1"></i>${announce.date}</span>
                             </div>
                         </div>
-                        <button class="btn-delete" onclick="deletePost(${post.id})">
-                            🗑️ 删除
-                        </button>
+                        
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4 text-sm" style="color: var(--text-muted);">
+                                <span><i class="fas fa-eye mr-1"></i>${announce.views}</span>
+                                <span><i class="fas fa-heart mr-1"></i>${announce.likes}</span>
+                            </div>
+                            <button onclick="showDetail(${announce.id})" class="hover:opacity-80 transition" style="color: var(--text-primary);">
+                                查看详情 <i class="fas fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             `).join('');
         }
 
-        // 删除帖子
-        function deletePost(id) {
-            if (confirm('确定要删除这条内容吗？')) {
-                posts = posts.filter(p => p.id !== id);
-                savePosts();
-                renderPosts();
-                showNotification('删除成功', '内容已被删除');
-            }
-        }
-
-        // 获取类型标签
-        function getTypeLabel(type) {
-            const labels = {
-                'post': '帖子',
-                'announcement': '公告',
-                'notice': '通知'
-            };
-            return labels[type];
-        }
-
-        // 更新统计
-        function updateStats() {
-            document.getElementById('totalPosts').textContent = posts.length;
+        // 显示公告详情
+        function showDetail(id) {
+            const announce = announcements.find(a => a.id === id);
+            if (!announce) return;
             
-            const today = new Date().toDateString();
-            const todayCount = posts.filter(p => 
-                new Date(p.timestamp).toDateString() === today
-            ).length;
-            document.getElementById('todayPosts').textContent = todayCount;
-        }
-
-        // 显示通知
-        function showNotification(title, message) {
-            const notification = document.createElement('div');
-            notification.className = 'notification success';
-            notification.innerHTML = `
-                <div class="notification-icon">✓</div>
-                <div class="notification-content">
-                    <div class="notification-title">${title}</div>
-                    <div class="notification-message">${message}</div>
+            const detailContent = document.getElementById('detailContent');
+            detailContent.innerHTML = `
+                <div class="mb-6">
+                    ${announce.isPinned ? '<div class="inline-block mb-4 px-4 py-2 text-white rounded-full text-sm font-semibold" style="background: var(--accent-color);"><i class="fas fa-thumbtack mr-1"></i>置顶公告</div>' : ''}
+                    <h2 class="text-3xl font-bold text-white mb-4">${announce.title}</h2>
+                    <div class="flex items-center justify-between text-gray-300">
+                        <div class="flex items-center space-x-4">
+                            <span><i class="fas fa-user mr-2"></i>${announce.author}</span>
+                            <span><i class="fas fa-calendar mr-2"></i>${announce.date}</span>
+                            <span class="px-3 py-1 bg-white/20 rounded-full text-sm">${announce.categoryName}</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <button class="hover:text-white transition">
+                                <i class="fas fa-heart mr-1"></i>${announce.likes}
+                            </button>
+                            <button class="hover:text-white transition">
+                                <i class="fas fa-share mr-1"></i>分享
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <img src="${announce.image}" alt="${announce.title}" class="w-full h-64 object-cover rounded-xl mb-6">
+                
+                <div class="prose prose-invert max-w-none">
+                    <p class="text-gray-300 leading-relaxed text-lg">${announce.content}</p>
+                    <p class="text-gray-300 leading-relaxed text-lg mt-4">
+                        这是公告的详细内容。在实际应用中，这里会显示完整的公告正文，包括所有的详细信息、相关链接、附件下载等。
+                        公告内容可以包含富文本格式，如加粗、斜体、列表、表格等。
+                    </p>
+                </div>
+                
+                <div class="mt-8 pt-6 border-t border-gray-700">
+                    <div class="flex flex-wrap gap-2 mb-6">
+                        ${announce.tags.map(tag => `
+                            <span class="px-3 py-1 bg-white/10 rounded-full text-gray-300 text-sm hover:bg-white/20 transition cursor-pointer">
+                                #${tag}
+                            </span>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4 text-gray-400">
+                            <span><i class="fas fa-eye mr-1"></i>浏览 ${announce.views}</span>
+                            <span><i class="fas fa-clock mr-1"></i>发布于 ${announce.date}</span>
+                        </div>
+                        <div class="flex space-x-3">
+                            <button class="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+                                <i class="fas fa-print mr-2"></i>打印
+                            </button>
+                            <button class="px-4 py-2 bg-white/10 rounded-lg text-white hover:bg-white/20 transition">
+                                <i class="fas fa-download mr-2"></i>下载
+                            </button>
+                        </div>
+                    </div>
                 </div>
             `;
-            document.body.appendChild(notification);
-            setTimeout(() => notification.remove(), 3000);
+            
+            document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        // 初始化应用
-        init();
+        // 关闭详情模态框
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+        }
+
+        // 打开发布模态框
+        document.getElementById('fabButton').addEventListener('click', () => {
+            document.getElementById('publishModal').classList.remove('hidden');
+        });
+
+        // 关闭发布模态框
+        function closePublishModal() {
+            document.getElementById('publishModal').classList.add('hidden');
+            document.getElementById('publishForm').reset();
+        }
+
+        // 发布表单提交
+        document.getElementById('publishForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newAnnouncement = {
+                id: announcements.length + 1,
+                title: document.getElementById('titleInput').value,
+                category: document.getElementById('categorySelect').value,
+                categoryName: document.getElementById('categorySelect').options[document.getElementById('categorySelect').selectedIndex].text,
+                content: document.getElementById('contentInput').value,
+                author: "管理员",
+                date: new Date().toISOString().split('T')[0],
+                views: 0,
+                likes: 0,
+                image: `https://picsum.photos/seed/announce${announcements.length + 1}/400/250`,
+                tags: ["新发布"],
+                isPinned: false
+            };
+            
+            announcements.unshift(newAnnouncement);
+            renderAnnouncements(currentCategory, displayedAnnouncements);
+            closePublishModal();
+            
+            // 显示成功提示
+            showNotification('公告发布成功！');
+        });
+
+        // 美化后的分类筛选
+        document.querySelectorAll('.category-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentCategory = btn.dataset.category;
+                displayedAnnouncements = 6;
+                
+                // 更新按钮样式
+                document.querySelectorAll('.category-btn').forEach(b => {
+                    b.classList.remove('active');
+                    b.style.background = '';
+                    b.style.color = 'var(--text-primary)';
+                    b.querySelector('.category-count').style.background = 'var(--border-color)';
+                });
+                
+                btn.classList.add('active');
+                btn.style.background = 'var(--accent-color)';
+                btn.style.color = 'var(--bg-primary)';
+                btn.querySelector('.category-count').style.background = 'rgba(255, 255, 255, 0.2)';
+                
+                renderAnnouncements(currentCategory, displayedAnnouncements);
+            });
+        });
+
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = announcements.filter(a => 
+                a.title.toLowerCase().includes(searchTerm) || 
+                a.content.toLowerCase().includes(searchTerm) ||
+                a.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+            );
+            
+            const grid = document.getElementById('announcementsGrid');
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-search text-6xl mb-4" style="color: var(--text-muted);"></i>
+                        <p style="color: var(--text-secondary);">没有找到相关公告</p>
+                    </div>
+                `;
+            } else {
+                grid.innerHTML = filtered.slice(0, 6).map((announce, index) => `
+                    <div class="card-hover glass rounded-2xl overflow-hidden" data-aos="fade-up" data-aos-delay="${index * 100}">
+                        ${announce.isPinned ? '<div class="text-white text-xs px-3 py-1 text-center font-semibold" style="background: var(--accent-color);"><i class="fas fa-thumbtack mr-1"></i>置顶</div>' : ''}
+                        <div class="relative h-48 overflow-hidden">
+                            <img src="${announce.image}" alt="${announce.title}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4">
+                                <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs">
+                                    ${announce.categoryName}
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="p-6">
+                            <h3 class="font-bold text-lg mb-3 line-clamp-2" style="color: var(--text-primary);">${announce.title}</h3>
+                            <p class="text-sm mb-4 line-clamp-3" style="color: var(--text-secondary);">${announce.content}</p>
+                            
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                ${announce.tags.map(tag => `
+                                    <span class="tag-badge px-2 py-1 rounded-full text-xs" style="background: var(--border-color); color: var(--text-secondary);">
+                                        #${tag}
+                                    </span>
+                                `).join('')}
+                            </div>
+                            
+                            <div class="flex items-center justify-between text-sm mb-4" style="color: var(--text-muted);">
+                                <div class="flex items-center space-x-3">
+                                    <span><i class="fas fa-user mr-1"></i>${announce.author}</span>
+                                    <span><i class="fas fa-calendar mr-1"></i>${announce.date}</span>
+                                </div>
+                            </div>
+                            
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center space-x-4 text-sm" style="color: var(--text-muted);">
+                                    <span><i class="fas fa-eye mr-1"></i>${announce.views}</span>
+                                    <span><i class="fas fa-heart mr-1"></i>${announce.likes}</span>
+                                </div>
+                                <button onclick="showDetail(${announce.id})" class="hover:opacity-80 transition" style="color: var(--text-primary);">
+                                    查看详情 <i class="fas fa-arrow-right ml-1"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        });
+
+        // 加载更多
+        document.getElementById('loadMoreBtn').addEventListener('click', () => {
+            displayedAnnouncements += 3;
+            renderAnnouncements(currentCategory, displayedAnnouncements);
+            
+            if (displayedAnnouncements >= announcements.length) {
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            }
+        });
+
+        // 侧边栏切换
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+
+        // 显示通知
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 glass px-6 py-4 rounded-lg z-50 flex items-center space-x-3';
+            notification.style.color = 'var(--text-primary)';
+            notification.innerHTML = `
+                <i class="fas fa-check-circle text-green-600"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'fadeOut 0.5s';
+                setTimeout(() => notification.remove(), 500);
+            }, 3000);
+        }
+
+        // 添加fadeOut动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translateX(0); }
+                to { opacity: 0; transform: translateX(100px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderAnnouncements();
+            initLogoLoop();
+        });
     </script>
 </body>
 </html>

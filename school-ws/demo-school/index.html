@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="学校官方公告站，发布最新校园新闻、通知和活动信息。">
+    <meta name="keywords" content="学校公告，校园新闻，通知">
+    <meta property="og:title" content="示范中学 - 公告站">
+    <meta property="og:description" content="学校官方公告与校园新闻发布平台">
+    <meta property="og:type" content="website">
+    
+    <!-- ============ 可替换变量区域 开始 ============
+    修改以下变量以快速适配不同学校：
+    - SCHOOL_NAME: 学校名称
+    - LOGO_URL: 学校 Logo 路径
+    - PRIMARY_COLOR: 主品牌色 (Hex)
+    - BG_IMAGE_URL: 背景图片 URL
+    - SCHOOL_DESCRIPTION: 学校描述
+    =========================================== -->
+    
+    <title>示范中学 - 公告站</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- 自定义全局样式 -->
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-dark: #1e40af;
+            --school-name: '示范中学';
+            --bg-image: url('https://images.unsplash.com/photo-1507842217343-583f20270319?w=1200&h=400&fit=crop');
+        }
+        
+        * {
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+        
+        /* 毛玻璃效果基础 */
+        .glass {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-light {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* 品牌色覆盖 */
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .text-primary {
+            color: var(--primary-color);
+        }
+        
+        /* 骨架屏动画 */
+        .skeleton {
+            animation: skeleton-loading 1s infinite;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* 页面背景 */
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+        
+        /* 搜索框焦点 */
+        .search-box:focus-within {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.4);
+        }
+        
+        /* 标签样式 */
+        .badge-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+        
+        .badge-important {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .badge-hot {
+            background-color: rgba(249, 115, 22, 0.2);
+            color: #fed7aa;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+        
+        .badge-normal {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #bfdbfe;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        /* 横幅图片 */
+        .banner {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.7) 0%, rgba(118, 75, 162, 0.7) 100%), var(--bg-image);
+            background-position: center;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* 按钮活动状态 */
+        .btn-active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="glass sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-bold text-white">示范中学</h1>
+                        <p class="text-xs text-blue-100">公告站</p>
+                    </div>
+                </div>
+                
+                <!-- 导航菜单 -->
+                <div class="hidden md:flex gap-6">
+                    <a href="index.html" class="text-white font-medium hover:text-blue-200 transition">首页</a>
+                    <a href="announcements.html" class="text-blue-100 hover:text-blue-200 transition">公告列表</a>
+                    <a href="publish.html" class="text-blue-100 hover:text-blue-200 transition">发布公告</a>
+                </div>
+                
+                <!-- 移动菜单按钮 -->
+                <button class="md:hidden text-white hover:bg-white/10 p-2 rounded-lg" aria-label="菜单">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="min-h-screen pt-8 pb-20">
+        <!-- 横幅 -->
+        <section class="banner py-24 sm:py-32 text-center text-white mb-12">
+            <div class="max-w-4xl mx-auto px-4">
+                <h2 class="text-4xl sm:text-5xl font-bold mb-6 drop-shadow-lg">校园公告站</h2>
+                <p class="text-lg sm:text-xl text-blue-100 drop-shadow drop-shadow-lg">
+                    汇集学校最新动态，第一时间获取重要通知和活动信息
+                </p>
+            </div>
+        </section>
+
+        <!-- 搜索与筛选区域 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <div class="glass rounded-2xl p-6 card-hover">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <!-- 搜索框 -->
+                    <div class="md:col-span-2">
+                        <div class="search-box glass-light rounded-xl px-4 py-3 flex items-center gap-3">
+                            <i class="fas fa-search text-blue-200"></i>
+                            <input 
+                                type="text" 
+                                placeholder="搜索公告..." 
+                                class="bg-transparent text-white outline-none w-full placeholder-blue-200"
+                                id="searchInput"
+                            >
+                        </div>
+                    </div>
+                    
+                    <!-- 分类筛选 -->
+                    <div>
+                        <select class="w-full glass-light rounded-xl px-4 py-3 text-white outline-none cursor-pointer" id="categoryFilter">
+                            <option value="" class="text-gray-900">全部分类</option>
+                            <option value="notice" class="text-gray-900">通知公告</option>
+                            <option value="event" class="text-gray-900">校园活动</option>
+                            <option value="news" class="text-gray-900">校园新闻</option>
+                            <option value="academic" class="text-gray-900">教学通知</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 置顶公告 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
+            <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <i class="fas fa-thumbtack text-amber-400"></i>
+                置顶公告
+            </h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- 置顶公告卡片 1 -->
+                <article class="glass rounded-2xl overflow-hidden card-hover group cursor-pointer" onclick="window.location.href='announcement-detail.html?id=1'">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <div class="flex gap-2">
+                                <span class="badge-tag badge-important flex items-center gap-1">
+                                    <i class="fas fa-exclamation-circle"></i> 重要
+                                </span>
+                                <span class="badge-tag" style="background-color: rgba(251, 146, 60, 0.2); color: #fed7aa; border: 1px solid rgba(251, 146, 60, 0.3);">
+                                    <i class="fas fa-fire"></i> 热点
+                                </span>
+                            </div>
+                            <i class="fas fa-thumbtack text-amber-400"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition">
+                            2024年秋季学期开学时间调整通知
+                        </h4>
+                        <p class="text-blue-100 text-sm mb-4 line-clamp-3">
+                            根据教育部最新要求，我校决定调整2024年秋季学期开学时间。新生报到时间为8月25日，老生报到时间为8月26日，正式开课时间为8月27日...
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-blue-200">
+                            <span><i class="fas fa-calendar-alt mr-1"></i>2024-08-20</span>
+                            <span><i class="fas fa-user mr-1"></i>教务处</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 置顶公告卡片 2 -->
+                <article class="glass rounded-2xl overflow-hidden card-hover group cursor-pointer" onclick="window.location.href='announcement-detail.html?id=2'">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-3">
+                            <span class="badge-tag badge-normal flex items-center gap-1">
+                                <i class="fas fa-megaphone"></i> 通知
+                            </span>
+                            <i class="fas fa-thumbtack text-amber-400"></i>
+                        </div>
+                        <h4 class="text-lg font-bold text-white mb-2 group-hover:text-blue-300 transition">
+                            第十届校运动会报名截止延期通知
+                        </h4>
+                        <p class="text-blue-100 text-sm mb-4 line-clamp-3">
+                            由于台风影响，原定8月18日的校运动会报名截止时间现延期至8月25日。各班级请抓紧时间组织学生报名，可在班级体育委员处登记...
+                        </p>
+                        <div class="flex items-center justify-between text-xs text-blue-200">
+                            <span><i class="fas fa-calendar-alt mr-1"></i>2024-08-18</span>
+                            <span><i class="fas fa-user mr-1"></i>学生处</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+        <!-- 最新公告聚合 -->
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-white flex items-center gap-3">
+                    <i class="fas fa-newspaper text-blue-300"></i>
+                    最新公告
+                </h3>
+                <a href="announcements.html" class="text-blue-200 hover:text-white flex items-center gap-2 transition">
+                    查看全部 <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+
+            <div class="space-y-4" id="announcementsList">
+                <!-- 公告列表项会由 JS 动态填充 -->
+            </div>
+
+            <!-- 加载更多按钮 -->
+            <div class="text-center mt-8">
+                <button class="btn-primary text-white px-8 py-3 rounded-xl font-medium hover:shadow-lg transition" onclick="loadMoreAnnouncements()">
+                    <i class="fas fa-spinner mr-2"></i> 加载更多
+                </button>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部导航（移动端） -->
+    <nav class="glass fixed bottom-0 left-0 right-0 md:hidden z-40">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-around items-center h-16">
+                <a href="index.html" class="flex flex-col items-center gap-1 text-blue-300 font-medium">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs">首页</span>
+                </a>
+                <a href="announcements.html" class="flex flex-col items-center gap-1 text-blue-100 hover:text-blue-300 transition">
+                    <i class="fas fa-list text-xl"></i>
+                    <span class="text-xs">列表</span>
+                </a>
+                <a href="publish.html" class="flex flex-col items-center gap-1 text-blue-100 hover:text-blue-300 transition">
+                    <i class="fas fa-plus text-xl"></i>
+                    <span class="text-xs">发布</span>
+                </a>
+                <button class="flex flex-col items-center gap-1 text-blue-100 hover:text-blue-300 transition" onclick="openAbout()">
+                    <i class="fas fa-info-circle text-xl"></i>
+                    <span class="text-xs">关于</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 关于模态框 -->
+    <div id="aboutModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4" onclick="closeAbout(event)">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+        <div class="glass rounded-2xl p-8 max-w-md w-full relative z-10 card-hover" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white">关于本站</h3>
+                <button onclick="closeAbout()" class="text-blue-200 hover:text-white transition">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="text-blue-100 space-y-4">
+                <p><strong>示范中学公告站</strong></p>
+                <p>这是我们学校的官方公告发布平台，用于及时传达学校的重要通知、校园活动和新闻信息。</p>
+                <p>
+                    <strong>联系方式：</strong><br>
+                    电话：010-1234-5678<br>
+                    邮箱：announce@demo-school.edu.cn
+                </p>
+                <p class="text-xs text-blue-200">版本 1.0 | © 2024 示范中学</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="glass mt-24 pt-12 pb-24 md:pb-12 text-center text-blue-200 text-sm border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="mb-4">
+                <strong>示范中学</strong> | 校园公告官方平台
+            </p>
+            <div class="flex justify-center gap-6 mb-6">
+                <a href="#" class="hover:text-white transition">隐私政策</a>
+                <a href="#" class="hover:text-white transition">使用条款</a>
+                <a href="#" class="hover:text-white transition">联系我们</a>
+            </div>
+            <p>© 2024 示范中学. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <!-- 主脚本 -->
+    <script>
+        // ============ 示例数据 ============
+        const announcementsData = [
+            {
+                id: 3,
+                title: '2024年校级先进班集体评比结果公示',
+                category: 'news',
+                date: '2024-08-15',
+                author: '学生处',
+                content: '经过综合评比，以下班级荣获2024年校级先进班集体称号...',
+                image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop',
+                badge: 'normal',
+                views: 234,
+                attachments: ['result.pdf']
+            },
+            {
+                id: 4,
+                title: '关于举办2024年"绿色校园"环保知识竞赛的通知',
+                category: 'event',
+                date: '2024-08-12',
+                author: '团委',
+                content: '为增强全校师生的环保意识，学校决定举办2024年"绿色校园"环保知识竞赛...',
+                image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop',
+                badge: 'hot',
+                views: 512,
+                attachments: []
+            },
+            {
+                id: 5,
+                title: '教室空调维护保养通知',
+                category: 'notice',
+                date: '2024-08-10',
+                author: '总务处',
+                content: '为确保教室空调正常运行，学校将于8月10日至8月15日对各教室空调进行维护...',
+                image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop',
+                badge: 'normal',
+                views: 123,
+                attachments: []
+            },
+            {
+                id: 6,
+                title: '高考英语听力题库更新',
+                category: 'academic',
+                date: '2024-08-08',
+                author: '教务处',
+                content: '学校英语组已更新2024年高考听力模拟题库，供高三年级使用...',
+                image: 'https://images.unsplash.com/photo-1503676260728-1c00da068326?w=400&h=300&fit=crop',
+                badge: 'normal',
+                views: 89,
+                attachments: ['listening.zip', 'answer_key.pdf']
+            },
+            {
+                id: 7,
+                title: '学生宿舍开放时间调整公告',
+                category: 'notice',
+                date: '2024-08-05',
+                author: '学生处',
+                content: '根据学校安排，学生宿舍开放时间现调整为...',
+                image: 'https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=400&h=300&fit=crop',
+                badge: 'normal',
+                views: 167,
+                attachments: []
+            }
+        ];
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAnnouncements(announcementsData.slice(0, 3));
+        });
+
+        // 渲染公告列表
+        function renderAnnouncements(announcements) {
+            const container = document.getElementById('announcementsList');
+            container.innerHTML = announcements.map(item => `
+                <article class="glass rounded-xl overflow-hidden card-hover group cursor-pointer hover:shadow-xl transition" onclick="goToDetail(${item.id})">
+                    <div class="flex flex-col sm:flex-row">
+                        <!-- 图片 -->
+                        <div class="sm:w-32 h-32 flex-shrink-0 overflow-hidden">
+                            <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                        </div>
+                        <!-- 内容 -->
+                        <div class="flex-1 p-4 sm:p-5 flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <span class="badge-tag badge-${item.badge}">
+                                        ${getBadgeText(item.badge)}
+                                    </span>
+                                    ${item.attachments.length > 0 ? `<i class="fas fa-paperclip text-blue-200 text-xs"></i>` : ''}
+                                </div>
+                                <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-blue-300 transition line-clamp-2">
+                                    ${item.title}
+                                </h4>
+                            </div>
+                            <div class="flex items-center justify-between text-xs text-blue-200 mt-3">
+                                <div class="flex gap-4">
+                                    <span><i class="fas fa-calendar-alt mr-1"></i>${item.date}</span>
+                                    <span><i class="fas fa-user mr-1"></i>${item.author}</span>
+                                </div>
+                                <span><i class="fas fa-eye mr-1"></i>${item.views}</span>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+        }
+
+        // 获取徽章文本
+        function getBadgeText(badge) {
+            const badges = {
+                'important': '<i class="fas fa-exclamation-circle mr-1"></i>重要',
+                'hot': '<i class="fas fa-fire mr-1"></i>热点',
+                'normal': '<i class="fas fa-bell mr-1"></i>通知'
+            };
+            return badges[badge] || badges['normal'];
+        }
+
+        // 跳转到详情页
+        function goToDetail(id) {
+            window.location.href = `announcement-detail.html?id=${id}`;
+        }
+
+        // 加载更多公告
+        function loadMoreAnnouncements() {
+            renderAnnouncements(announcementsData);
+        }
+
+        // 打开关于模态框
+        function openAbout() {
+            document.getElementById('aboutModal').classList.remove('hidden');
+        }
+
+        // 关闭关于模态框
+        function closeAbout(event) {
+            if (!event || event.target === document.getElementById('aboutModal')) {
+                document.getElementById('aboutModal').classList.add('hidden');
+            }
+        }
+
+        // 搜索功能
+        document.getElementById('searchInput')?.addEventListener('input', function(e) {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = announcementsData.filter(item => 
+                item.title.toLowerCase().includes(keyword) || 
+                item.content.toLowerCase().includes(keyword)
+            );
+            renderAnnouncements(filtered.length > 0 ? filtered : announcementsData.slice(0, 3));
+        });
+
+        // 分类筛选
+        document.getElementById('categoryFilter')?.addEventListener('change', function(e) {
+            const category = e.target.value;
+            const filtered = category ? announcementsData.filter(item => item.category === category) : announcementsData;
+            renderAnnouncements(filtered.slice(0, 3));
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="学校公告列表，支持按分类、日期和重要性筛选。">
+    <meta name="keywords" content="公告列表，筛选，搜索">
+    <meta property="og:title" content="公告列表 - 示范中学">
+    <meta property="og:description" content="查看学校所有公告和通知">
+    
+    <title>公告列表 - 示范中学</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #3b82f6;
+            --primary-dark: #1e40af;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        
+        .glass {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            background-color: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        
+        .glass-light {
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px);
+        }
+        
+        .badge-tag {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            display: inline-block;
+        }
+        
+        .badge-important {
+            background-color: rgba(239, 68, 68, 0.2);
+            color: #fca5a5;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .badge-hot {
+            background-color: rgba(249, 115, 22, 0.2);
+            color: #fed7aa;
+            border: 1px solid rgba(249, 115, 22, 0.3);
+        }
+        
+        .badge-normal {
+            background-color: rgba(59, 130, 246, 0.2);
+            color: #bfdbfe;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .skeleton {
+            animation: skeleton-loading 1s infinite;
+            background: linear-gradient(90deg, rgba(255,255,255,0.1) 25%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0.1) 75%);
+            background-size: 200% 100%;
+        }
+        
+        @keyframes skeleton-loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .pagination-active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="glass sticky top-0 z-50 shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-400 to-purple-600 flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-white text-lg"></i>
+                    </div>
+                    <div class="hidden sm:block">
+                        <h1 class="text-lg font-bold text-white">示范中学</h1>
+                        <p class="text-xs text-blue-100">公告站</p>
+                    </div>
+                </div>
+                
+                <div class="hidden md:flex gap-6">
+                    <a href="index.html" class="text-blue-100 hover:text-blue-200 transition">首页</a>
+                    <a href="announcements.html" class="text-white font-medium">公告列表</a>
+                    <a href="publish.html" class="text-blue-100 hover:text-blue-200 transition">发布公告</a>
+                </div>
+                
+                <a href="index.html" class="md:hidden text-white hover:bg-white/10 p-2 rounded-lg">
+                    <i class="fas fa-arrow-left text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pb-24 md:pb-12">
+        <!-- 页面标题 -->
+        <div class="mb-12">
+            <h2 class="text-4xl font-bold text-white mb-2">公告列表</h2>
+            <p class="text-blue-100">浏览学校所有公告和通知</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+            <!-- 侧边栏筛选 -->
+            <aside class="lg:col-span-1">
+                <div class="glass rounded-2xl p-6 sticky top-24">
+                    <h3 class="text-lg font-bold text-white mb-6">筛选</h3>
+                    
+                    <!-- 按分类筛选 -->
+                    <div class="mb-8">
+                        <h4 class="text-sm font-semibold text-blue-200 mb-4">分类</h4>
+                        <div class="space-y-2" id="categoryFilters">
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light active transition" data-category="">
+                                <i class="fas fa-check-circle mr-2 text-primary-color"></i>全部
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-category="notice">
+                                <i class="fas fa-circle mr-2"></i>通知公告
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-category="event">
+                                <i class="fas fa-circle mr-2"></i>校园活动
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-category="news">
+                                <i class="fas fa-circle mr-2"></i>校园新闻
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-category="academic">
+                                <i class="fas fa-circle mr-2"></i>教学通知
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 按日期范围筛选 -->
+                    <div class="mb-8">
+                        <h4 class="text-sm font-semibold text-blue-200 mb-4">日期范围</h4>
+                        <div class="space-y-2">
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light active transition" data-date="all">
+                                <i class="fas fa-check-circle mr-2 text-primary-color"></i>不限
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-date="week">
+                                <i class="fas fa-circle mr-2"></i>最近一周
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-date="month">
+                                <i class="fas fa-circle mr-2"></i>最近一个月
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-date="year">
+                                <i class="fas fa-circle mr-2"></i>最近一年
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 按重要性筛选 -->
+                    <div>
+                        <h4 class="text-sm font-semibold text-blue-200 mb-4">重要性</h4>
+                        <div class="space-y-2">
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light active transition" data-priority="all">
+                                <i class="fas fa-check-circle mr-2 text-primary-color"></i>全部
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-priority="important">
+                                <i class="fas fa-circle mr-2"></i>仅重要
+                            </button>
+                            <button class="filter-btn w-full text-left text-blue-100 hover:text-white px-4 py-2 rounded-lg glass-light transition" data-priority="hot">
+                                <i class="fas fa-circle mr-2"></i>仅热点
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary w-full text-white mt-8 py-2 rounded-lg font-medium hover:shadow-lg transition" onclick="resetFilters()">
+                        <i class="fas fa-redo mr-2"></i>重置筛选
+                    </button>
+                </div>
+            </aside>
+
+            <!-- 主要内容区 -->
+            <div class="lg:col-span-3">
+                <!-- 搜索栏 -->
+                <div class="glass rounded-xl p-4 mb-8">
+                    <div class="search-box glass-light rounded-lg px-4 py-3 flex items-center gap-3">
+                        <i class="fas fa-search text-blue-200"></i>
+                        <input 
+                            type="text" 
+                            placeholder="搜索公告标题..." 
+                            class="bg-transparent text-white outline-none w-full placeholder-blue-200"
+                            id="searchInput"
+                        >
+                    </div>
+                </div>
+
+                <!-- 排序选项 -->
+                <div class="flex justify-between items-center mb-6">
+                    <p class="text-blue-100"><span id="resultCount">8</span> 条结果</p>
+                    <select class="glass-light text-white rounded-lg px-4 py-2 outline-none cursor-pointer" id="sortSelect" onchange="applySorting()">
+                        <option value="latest">最新优先</option>
+                        <option value="oldest">最早优先</option>
+                        <option value="views">阅读量优先</option>
+                    </select>
+                </div>
+
+                <!-- 公告列表 -->
+                <div class="space-y-4" id="announcementsList">
+                    <!-- 骨架屏加载状态 -->
+                    <div class="glass rounded-xl overflow-hidden">
+                        <div class="flex gap-4 p-6">
+                            <div class="w-32 h-32 rounded-lg skeleton flex-shrink-0"></div>
+                            <div class="flex-1 space-y-3">
+                                <div class="h-4 skeleton rounded w-3/4"></div>
+                                <div class="h-4 skeleton rounded w-full"></div>
+                                <div class="h-4 skeleton rounded w-2/3"></div>
+                                <div class="h-3 skeleton rounded w-1/4 mt-4"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 分页 -->
+                <div class="flex justify-center gap-2 mt-12" id="pagination">
+                    <!-- 分页会由 JS 生成 -->
+                </div>
+
+                <!-- 无结果提示 -->
+                <div id="emptyState" class="hidden text-center py-12">
+                    <i class="fas fa-inbox text-6xl text-blue-200 mb-4"></i>
+                    <p class="text-blue-100 text-lg">暂无匹配的公告</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部导航（移动端） -->
+    <nav class="glass fixed bottom-0 left-0 right-0 md:hidden z-40">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex justify-around items-center h-16">
+                <a href="index.html" class="flex flex-col items-center gap-1 text-blue-100 hover:text-blue-300 transition">
+                    <i class="fas fa-home text-xl"></i>
+                    <span class="text-xs">首页</span>
+                </a>
+                <a href="announcements.html" class="flex flex-col items-center gap-1 text-blue-300 font-medium">
+                    <i class="fas fa-list text-xl"></i>
+                    <span class="text-xs">列表</span>
+                </a>
+                <a href="publish.html" class="flex flex-col items-center gap-1 text-blue-100 hover:text-blue-300 transition">
+                    <i class="fas fa-plus text-xl"></i>
+                    <span class="text-xs">发布</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 页脚 -->
+    <footer class="glass mt-24 pt-12 pb-24 md:pb-12 text-center text-blue-200 text-sm border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4">
+            <p class="mb-4">
+                <strong>示范中学</strong> | 校园公告官方平台
+            </p>
+            <p>© 2024 示范中学. 保留所有权利。</p>
+        </div>
+    </footer>
+
+    <script>
+        // ============ 公告数据 ============
+        const announcementsData = [
+            {
+                id: 1,
+                title: '2024年秋季学期开学时间调整通知',
+                category: 'notice',
+                date: '2024-08-20',
+                author: '教务处',
+                badge: 'important',
+                views: 456,
+                image: 'https://images.unsplash.com/photo-1523580494863-6f3031224c94?w=400&h=300&fit=crop',
+                attachments: ['notice.pdf']
+            },
+            {
+                id: 2,
+                title: '第十届校运动会报名截止延期通知',
+                category: 'event',
+                date: '2024-08-18',
+                author: '学生处',
+                badge: 'normal',
+                views: 234,
+                image: 'https://images.unsplash.com/photo-1516534775068-bb57a88a5eed?w=400&h=300&fit=crop',
+                attachments: []
+            },
+            {
+                id: 3,
+                title: '2024年校级先进班集体评比结果公示',
+                category: 'news',
+                date: '2024-08-15',
+                author: '学生处',
+                badge: 'normal',
+                views: 189,
+                image: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400&h=300&fit=crop',
+                attachments: []
+            },
+            {
+                id: 4,
+                title: '关于举办2024年"绿色校园"环保知识竞赛的通知',
+                category: 'event',
+                date: '2024-08-12',
+                author: '团委',
+                badge: 'hot',
+                views: 512,
+                image: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=400&h=300&fit=crop',
+                attachments: []
+            },
+            {
+                id: 5,
+                title: '教室空调维护保养通知',
+                category: 'notice',
+                date: '2024-08-10',
+                author: '总务处',
+                badge: 'normal',
+                views: 123,
+                image: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=400&h=300&fit=crop',
+                attachments: []
+            },
+            {
+                id: 6,
+                title: '高考英语听力题库更新',
+                category: 'academic',
+                date: '2024-08-08',
+                author: '教务处',
+                badge: 'normal',
+                views: 89,
+                image: 'https://images.unsplash.com/photo-1503676260728-1c00da068326?w=400&h=300&fit=crop',
+                attachments: ['listening.zip']
+            },
+            {
+                id: 7,
+                title: '学生宿舍开放时间调整公告',
+                category: 'notice',
+                date: '2024-08-05',
+                author: '学生处',
+                badge: 'normal',
+                views: 167,
+                image: 'https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=400&h=300&fit=crop',
+                attachments: []
+            },
+            {
+                id: 8,
+                title: '2024年图书馆新书推荐',
+                category: 'news',
+                date: '2024-07-30',
+                author: '图书馆',
+                badge: 'normal',
+                views: 76,
+                image: 'https://images.unsplash.com/photo-1507842217343-583f20270319?w=400&h=300&fit=crop',
+                attachments: []
+            }
+        ];
+
+        let currentFilter = {
+            category: '',
+            date: 'all',
+            priority: 'all',
+            search: '',
+            sort: 'latest'
+        };
+
+        let currentPage = 1;
+        const itemsPerPage = 5;
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderAnnouncements();
+            setupEventListeners();
+        });
+
+        // 设置事件监听
+        function setupEventListeners() {
+            // 分类筛选
+            document.querySelectorAll('[data-category]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-category]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter.category = this.dataset.category;
+                    currentPage = 1;
+                    renderAnnouncements();
+                });
+            });
+
+            // 日期筛选
+            document.querySelectorAll('[data-date]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-date]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter.date = this.dataset.date;
+                    currentPage = 1;
+                    renderAnnouncements();
+                });
+            });
+
+            // 重要性筛选
+            document.querySelectorAll('[data-priority]').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('[data-priority]').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter.priority = this.dataset.priority;
+                    currentPage = 1;
+                    renderAnnouncements();
+                });
+            });
+
+            // 搜索
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                currentFilter.search = e.target.value.toLowerCase();
+                currentPage = 1;
+                renderAnnouncements();
+            });
+        }
+
+        // 获取徽章样式
+        function getBadgeClass(badge) {
+            const classes = {
+                'important': 'badge-important',
+                'hot': 'badge-hot',
+                'normal': 'badge-normal'
+            };
+            return classes[badge] || 'badge-normal';
+        }
+
+        // 获取徽章文本
+        function getBadgeText(badge) {
+            const texts = {
+                'important': '<i class="fas fa-exclamation-circle mr-1"></i>重要',
+                'hot': '<i class="fas fa-fire mr-1"></i>热点',
+                'normal': '<i class="fas fa-bell mr-1"></i>通知'
+            };
+            return texts[badge] || texts['normal'];
+        }
+
+        // 筛选公告
+        function filterAnnouncements() {
+            let filtered = announcementsData;
+
+            // 分类筛选
+            if (currentFilter.category) {
+                filtered = filtered.filter(item => item.category === currentFilter.category);
+            }
+
+            // 优先级筛选
+            if (currentFilter.priority !== 'all') {
+                filtered = filtered.filter(item => item.badge === currentFilter.priority);
+            }
+
+            // 日期筛选
+            if (currentFilter.date !== 'all') {
+                const today = new Date();
+                filtered = filtered.filter(item => {
+                    const itemDate = new Date(item.date);
+                    let daysAgo;
+                    
+                    if (currentFilter.date === 'week') daysAgo = 7;
+                    else if (currentFilter.date === 'month') daysAgo = 30;
+                    else if (currentFilter.date === 'year') daysAgo = 365;
+                    
+                    const diffTime = today - itemDate;
+                    const diffDays = diffTime / (1000 * 60 * 60 * 24);
+                    return diffDays <= daysAgo;
+                });
+            }
+
+            // 搜索筛选
+            if (currentFilter.search) {
+                filtered = filtered.filter(item =>
+                    item.title.toLowerCase().includes(currentFilter.search)
+                );
+            }
+
+            return filtered;
+        }
+
+        // 排序公告
+        function sortAnnouncements(announcements) {
+            const sorted = [...announcements];
+            
+            if (currentFilter.sort === 'latest') {
+                sorted.sort((a, b) => new Date(b.date) - new Date(a.date));
+            } else if (currentFilter.sort === 'oldest') {
+                sorted.sort((a, b) => new Date(a.date) - new Date(b.date));
+            } else if (currentFilter.sort === 'views') {
+                sorted.sort((a, b) => b.views - a.views);
+            }
+            
+            return sorted;
+        }
+
+        // 应用排序
+        function applySorting() {
+            currentFilter.sort = document.getElementById('sortSelect').value;
+            currentPage = 1;
+            renderAnnouncements();
+        }
+
+        // 渲染公告列表
+        function renderAnnouncements() {
+            const filtered = filterAnnouncements();
+            const sorted = sortAnnouncements(filtered);
+            
+            const totalPages = Math.ceil(sorted.length / itemsPerPage);
+            const start = (currentPage - 1) * itemsPerPage;
+            const end = start + itemsPerPage;
+            const paged = sorted.slice(start, end);
+
+            // 更新结果数量
+            document.getElementById('resultCount').textContent = sorted.length;
+
+            // 渲染列表
+            const container = document.getElementById('announcementsList');
+            if (paged.length === 0) {
+                container.innerHTML = '';
+                document.getElementById('emptyState').classList.remove('hidden');
+            } else {
+                document.getElementById('emptyState').classList.add('hidden');
+                container.innerHTML = paged.map(item => `
+                    <article class="glass rounded-xl overflow-hidden card-hover group cursor-pointer hover:shadow-xl transition" onclick="goToDetail(${item.id})">
+                        <div class="flex flex-col sm:flex-row">
+                            <div class="sm:w-32 h-32 flex-shrink-0 overflow-hidden">
+                                <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-110 transition duration-300">
+                            </div>
+                            <div class="flex-1 p-4 sm:p-5 flex flex-col justify-between">
+                                <div>
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="badge-tag ${getBadgeClass(item.badge)}">
+                                            ${getBadgeText(item.badge)}
+                                        </span>
+                                        ${item.attachments.length > 0 ? `<i class="fas fa-paperclip text-blue-200 text-xs"></i>` : ''}
+                                    </div>
+                                    <h4 class="text-base sm:text-lg font-bold text-white group-hover:text-blue-300 transition line-clamp-2">
+                                        ${item.title}
+                                    </h4>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-blue-200 mt-3">
+                                    <div class="flex gap-4">
+                                        <span><i class="fas fa-calendar-alt mr-1"></i>${item.date}</span>
+                                        <span><i class="fas fa-user mr-1"></i>${item.author}</span>
+                                    </div>
+                                    <span><i class="fas fa-eye mr-1"></i>${item.views}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+                `).join('');
+            }
+
+            // 渲染分页
+            renderPagination(totalPages);
+        }
+
+        // 渲染分页按钮
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            
+            // 上一页
+            if (currentPage > 1) {
+                html += `<button onclick="goToPage(${currentPage - 1})" class="glass-light text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition">
+                    <i class="fas fa-chevron-left"></i>
+                </button>`;
+            }
+
+            // 页码
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === currentPage) {
+                    html += `<button class="pagination-active px-4 py-2 rounded-lg font-bold">${i}</button>`;
+                } else if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button onclick="goToPage(${i})" class="glass-light text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition">${i}</button>`;
+                } else if (i === 2 || i === totalPages - 1) {
+                    html += `<span class="text-white">...</span>`;
+                }
+            }
+
+            // 下一页
+            if (currentPage < totalPages) {
+                html += `<button onclick="goToPage(${currentPage + 1})" class="glass-light text-white px-4 py-2 rounded-lg hover:bg-blue-400 transition">
+                    <i class="fas fa-chevron-right"></i>
+                </button>`;
+            }
+
+            container.innerHTML = html;
+        }
+
+        // 跳转到指定页
+        function goToPage(page) {
+            currentPage = page;
+            renderAnnouncements();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 重置筛选
+        function resetFilters() {
+            currentFilter = {
+                category: '',
+                date: 'all',
+                priority: 'all',
+                search: '',
+                sort: 'latest'
+            };
+            currentPage = 1;
+            
+            document.getElementById('searchInput').value = '';
+            document.getElementById('sortSelect').value = 'latest';
+            
+            document.querySelectorAll('.filter-btn.active').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('[data-category=""]')[0]?.classList.add('active');
+            document.querySelectorAll('[data-date="all"]')[0]?.classList.add('active');
+            document.querySelectorAll('[data-priority="all"]')[0]?.classList.add('active');
+            
+            renderAnnouncements();
+        }
+
+        // 跳转到详情页
+        function goToDetail(id) {
+            window.location.href = `announcement-detail.html?id=${id}`;
+        }
+    </script>
+</body>
+</html>
